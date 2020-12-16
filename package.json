@@ -30,7 +30,8 @@
     "type-graphql": "^0.18.0-beta.17",
     "typeorm": "^0.2.29",
     "uuid": "^3.3.2",
-    "ts-node": "^7.0.1"
+    "ts-node": "^7.0.1",
+    "ts-node-dev": "^1.0.0-pre.32"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
@@ -50,11 +51,10 @@
     "jest": "^23.6.0",
     "nodemon": "^1.18.9",
     "ts-jest": "^23.10.5",
-    "ts-node-dev": "^1.0.0-pre.32",
     "typescript": "^3.2.2"
   },
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "ts-node-dev src/index.ts",
     "start:dev": "ts-node-dev --respawn src/index.ts",
     "db:setup": "ts-node ./src/test-utils/setup.ts",
     "db:clear": "ts-node ./src/redis/redisClearDB.ts",
