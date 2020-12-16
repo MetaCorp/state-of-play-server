@@ -1,4 +1,5 @@
 import { Resolver, Mutation, Arg, Ctx } from "type-graphql";
+// @ts-ignore
 import bcrypt from "bcryptjs";
 
 import { User } from "../../entity/User";

@@ -1,3 +1,4 @@
+// @ts-ignore
 import bcrypt from "bcryptjs";
 import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
 import { sign } from "jsonwebtoken";

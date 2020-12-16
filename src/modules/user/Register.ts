@@ -1,4 +1,5 @@
 import { Resolver, Query, Mutation, Arg, UseMiddleware } from "type-graphql";
+// @ts-ignore
 import bcrypt from "bcryptjs";
 import { sign } from "jsonwebtoken";
 
