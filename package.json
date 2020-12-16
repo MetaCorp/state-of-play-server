@@ -32,7 +32,7 @@
     "uuid": "^3.3.2",
     "ts-node": "^7.0.1",
     "ts-node-dev": "^1.0.0-pre.32",
-    "@types/uuid": "^3.4.4",
+    "@types/uuid": "^3.4.4"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
