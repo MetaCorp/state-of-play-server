@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "engines": {
+    "node": "12.17.0"
+  },
   "dependencies": {
     "@types/ioredis": "^4.17.8",
     "apollo-server-express": "^2.3.1",
@@ -26,7 +29,8 @@
     "reflect-metadata": "^0.1.12",
     "type-graphql": "^0.18.0-beta.17",
     "typeorm": "^0.2.29",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "ts-node": "^7.0.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
@@ -46,12 +50,12 @@
     "jest": "^23.6.0",
     "nodemon": "^1.18.9",
     "ts-jest": "^23.10.5",
-    "ts-node": "^7.0.1",
     "ts-node-dev": "^1.0.0-pre.32",
     "typescript": "^3.2.2"
   },
   "scripts": {
-    "start": "ts-node-dev --respawn src/index.ts",
+    "start": "ts-node src/index.ts",
+    "start:dev": "ts-node-dev --respawn src/index.ts",
     "db:setup": "ts-node ./src/test-utils/setup.ts",
     "db:clear": "ts-node ./src/redis/redisClearDB.ts",
     "test": "npm run db:setup && jest"
