@@ -1,6 +1,7 @@
 import { ApolloServer } from "apollo-server-express";
 // import connectRedis from "connect-redis";
-const cors =  require("cors");
+// @ts-ignore
+import cors from "cors";
 import Express from "express";
 // import session from "express-session";
 import "reflect-metadata";
