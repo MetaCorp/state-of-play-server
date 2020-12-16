@@ -1,0 +1,12 @@
+{
+  "name": "default",
+  "type": "postgres",
+  "host": "kandula.db.elephantsql.com",
+  "port": "5432",
+  "username": "psllomqe",
+  "password": "bseM4Y_NIigA24FwVAyYDdWT1UuwkZOV",
+  "database": "psllomqe",
+  "synchronize": true,
+  "logging": true,
+  "entities": ["src/entity/*.*"]
+}

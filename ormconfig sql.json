@@ -1,0 +1,12 @@
+{
+  "name": "default",
+  "type": "mysql",
+  "host": "sql7.freemysqlhosting.net",
+  "port": "3306",
+  "username": "sql7380403",
+  "password": "Z6TLt3RMSG",
+  "database": "sql7380403",
+  "synchronize": true,
+  "logging": true,
+  "entities": ["src/entity/*.*"]
+}
