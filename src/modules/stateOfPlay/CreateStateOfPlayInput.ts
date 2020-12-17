@@ -184,4 +184,13 @@ export class CreateStateOfPlayInput {// TODO
 
   @Field()
   documentEnd: String
+
+  @Field()
+  entryExitDate: String
+
+  @Field()
+  date: String
+
+  @Field()
+  city: String
 }

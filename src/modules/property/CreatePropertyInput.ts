@@ -35,6 +35,9 @@ export class CreatePropertyInput {
   @Field()
   area: number;
 
+  @Field()
+  type: String;
+
   // // @Field()
   // // annexes: [String];
 

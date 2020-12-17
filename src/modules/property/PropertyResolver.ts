@@ -67,6 +67,7 @@ export class PropertyResolver {
 			area: data.area,
 			heatingType: data.heatingType,
 			hotWater: data.hotWater,
+			type: data.type,
 			user: user
 		}).save();
 
@@ -90,7 +91,8 @@ export class PropertyResolver {
 			roomCount: data.roomCount,
 			area: data.area,
 			heatingType: data.heatingType,
-			hotWater: data.hotWater
+			hotWater: data.hotWater,
+			type: data.type,
 		})
 		console.log('updateProperty: ', property)
 

@@ -130,9 +130,10 @@ export class StateOfPlayResolver {
 			owner = await Owner.create({
 				firstName: data.owner.firstName,
 				lastName: data.owner.lastName,
-				address: data.property.address,
-				postalCode: data.property.postalCode,
-				city: data.property.city,
+				address: data.owner.address,
+				postalCode: data.owner.postalCode,
+				city: data.owner.city,
+				company: data.representative.company,
 				user: user,
 			}).save();
 		}
@@ -144,9 +145,10 @@ export class StateOfPlayResolver {
 			representative = await Representative.create({
 				firstName: data.representative.firstName,
 				lastName: data.representative.lastName,
-				address: data.property.address,
-				postalCode: data.property.postalCode,
-				city: data.property.city,
+				address: data.representative.address,
+				postalCode: data.representative.postalCode,
+				city: data.representative.city,
+				company: data.representative.company,
 				user: user,
 			}).save();
 		}
@@ -184,14 +186,18 @@ export class StateOfPlayResolver {
 				area: data.property.area,
 				heatingType: data.property.heatingType,
 				hotWater: data.property.hotWater,
+				type: data.property.type,
 				user: user
 			}).save();
 		}
 		console.log('property: ', property)
 
+		console.log('data.rooms: ', data.rooms)
 		for (let i = 0; i < data.rooms.length; i++) {
+			console.log('room[' + i + '] :', data.rooms[i]);
 			
 			for (let j = 0; j < data.rooms[i].decorations.length; j++) {
+				console.log('room[' + i + '].decorations[' + j + '] :', data.rooms[i].decorations[j]);
 				
 				for (let k = 0; k < data.rooms[i].decorations[j].newImages.length; k++) {
 					const image = data.rooms[i].decorations[j].newImages[k];
@@ -200,6 +206,11 @@ export class StateOfPlayResolver {
 					// @ts-ignore
 					data.rooms[i].decorations[j].images.push(await uploadFile(filename, createReadStream()))
 				}
+
+			}
+				
+			for (let j = 0; j < data.rooms[i].electricities.length; j++) {
+				console.log('room[' + i + '].electricities[' + j + '] :', data.rooms[i].electricities[j]);
 				
 				for (let k = 0; k < data.rooms[i].electricities[j].newImages.length; k++) {
 					const image = data.rooms[i].electricities[j].newImages[k];
@@ -209,6 +220,11 @@ export class StateOfPlayResolver {
 					data.rooms[i].electricities[j].images.push(await uploadFile(filename, createReadStream()))
 				}
 
+			}
+
+			for (let j = 0; j < data.rooms[i].equipments.length; j++) {
+				console.log('room[' + i + '].equipments[' + j + '] :', data.rooms[i].equipments[j]);
+				
 				for (let k = 0; k < data.rooms[i].equipments[j].newImages.length; k++) {
 					const image = data.rooms[i].equipments[j].newImages[k];
 					const { createReadStream, filename } = await image;
@@ -216,6 +232,7 @@ export class StateOfPlayResolver {
 					// @ts-ignore
 					data.rooms[i].equipments[j].images.push(await uploadFile(filename, createReadStream()))
 				}
+
 			}
 		}
 
@@ -259,6 +276,9 @@ export class StateOfPlayResolver {
 			reserve: data.reserve,
 			documentHeader: data.documentHeader,
 			documentEnd: data.documentEnd,
+			entryExitDate: data.entryExitDate,
+			date: data.date,
+			city: data.city
 		}).save();
 		console.log('stateOfPlay: ', stateOfPlay)
 
@@ -284,6 +304,7 @@ export class StateOfPlayResolver {
 				address: data.owner.address,
 				postalCode: data.owner.postalCode,
 				city: data.owner.city,
+				company: data.owner.company,
 				user: user,
 			}).save();
 		}
@@ -298,6 +319,7 @@ export class StateOfPlayResolver {
 				address: data.representative.address,
 				postalCode: data.representative.postalCode,
 				city: data.representative.city,
+				company: data.representative.company,
 				user: user,
 			}).save();
 		}
@@ -335,6 +357,7 @@ export class StateOfPlayResolver {
 				area: data.property.area,
 				heatingType: data.property.heatingType,
 				hotWater: data.property.hotWater,
+				type: data.property.type,
 				user: user
 			}).save();
 		}
@@ -346,8 +369,10 @@ export class StateOfPlayResolver {
 		if (!stateOfPlay2) return 0
 
 		for (let i = 0; i < data.rooms.length; i++) {
+			console.log('room[' + i + '] :', data.rooms[i]);
 			
 			for (let j = 0; j < data.rooms[i].decorations.length; j++) {
+				console.log('room[' + i + '].decorations[' + j + '] :', data.rooms[i].decorations[j]);
 				
 				for (let k = 0; k < data.rooms[i].decorations[j].newImages.length; k++) {
 					const image = data.rooms[i].decorations[j].newImages[k];
@@ -356,6 +381,11 @@ export class StateOfPlayResolver {
 					// @ts-ignore
 					data.rooms[i].decorations[j].images.push(await uploadFile(filename, createReadStream()))
 				}
+
+			}
+				
+			for (let j = 0; j < data.rooms[i].electricities.length; j++) {
+				console.log('room[' + i + '].electricities[' + j + '] :', data.rooms[i].electricities[j]);
 				
 				for (let k = 0; k < data.rooms[i].electricities[j].newImages.length; k++) {
 					const image = data.rooms[i].electricities[j].newImages[k];
@@ -365,6 +395,11 @@ export class StateOfPlayResolver {
 					data.rooms[i].electricities[j].images.push(await uploadFile(filename, createReadStream()))
 				}
 
+			}
+
+			for (let j = 0; j < data.rooms[i].equipments.length; j++) {
+				console.log('room[' + i + '].equipments[' + j + '] :', data.rooms[i].equipments[j]);
+				
 				for (let k = 0; k < data.rooms[i].equipments[j].newImages.length; k++) {
 					const image = data.rooms[i].equipments[j].newImages[k];
 					const { createReadStream, filename } = await image;
@@ -372,6 +407,7 @@ export class StateOfPlayResolver {
 					// @ts-ignore
 					data.rooms[i].equipments[j].images.push(await uploadFile(filename, createReadStream()))
 				}
+
 			}
 		}
 
@@ -416,6 +452,9 @@ export class StateOfPlayResolver {
 		stateOfPlay2.reserve = data.reserve
 		stateOfPlay2.documentHeader = data.documentHeader
 		stateOfPlay2.documentEnd = data.documentEnd
+		stateOfPlay2.entryExitDate = data.entryExitDate
+		stateOfPlay2.date = data.date
+		stateOfPlay2.city = data.city
 
 		const ret = await connection.getRepository(StateOfPlay).save(stateOfPlay2)
 

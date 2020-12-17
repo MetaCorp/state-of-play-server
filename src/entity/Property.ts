@@ -47,6 +47,10 @@ export class Property extends BaseEntity {
   @Column()
   area: number;
 
+  @Field()
+  @Column()
+  type: String;
+
   // // @Field()
   // // @Column()
   // // annexes: [String];

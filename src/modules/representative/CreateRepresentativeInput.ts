@@ -25,4 +25,8 @@ export class CreateRepresentativeInput {
   @Field()
   @Length(1, 255)
   city: string;
+
+  @Field()
+  @Length(1, 255)
+  company: string;
 }

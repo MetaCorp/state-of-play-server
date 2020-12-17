@@ -35,6 +35,9 @@ export class UpdatePropertyInput {
   @Field()
   area: number;
 
+  @Field()
+  type: String;
+
   // // @Field()
   // // annexes: [String];
 

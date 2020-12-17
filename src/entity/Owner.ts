@@ -31,6 +31,10 @@ export class Owner extends BaseEntity {
   @Column()
   city: String;
 
+  @Field()
+  @Column()
+  company: String;
+
   @Field(() => [StateOfPlay])
   @OneToMany(() => StateOfPlay, stateOfPlay => stateOfPlay.owner)
   stateOfPlays: StateOfPlay[];

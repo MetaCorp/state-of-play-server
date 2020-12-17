@@ -182,4 +182,13 @@ export class UpdateStateOfPlayInput {
   
     @Field()
     documentEnd: String
+
+    @Field()
+    entryExitDate: String
+  
+    @Field()
+    date: String
+
+    @Field()
+    city: String
 }

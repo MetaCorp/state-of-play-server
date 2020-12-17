@@ -56,6 +56,7 @@ export class RepresentativeResolver {
 			address: data.address,
 			postalCode: data.postalCode,
 			city: data.city,
+			company: data.company,
 			user: user,
 		}).save();
 
@@ -75,6 +76,7 @@ export class RepresentativeResolver {
 			address: data.address,
 			postalCode: data.postalCode,
 			city: data.city,
+			company: data.company,
 		})
 		console.log('updateRepresentative: ', representative)
 
