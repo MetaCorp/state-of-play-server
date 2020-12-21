@@ -199,7 +199,7 @@ export class StateOfPlayResolver {
 			for (let j = 0; j < data.rooms[i].decorations.length; j++) {
 				console.log('room[' + i + '].decorations[' + j + '] :', data.rooms[i].decorations[j]);
 				
-				for (let k = 0; k < data.rooms[i].decorations[j].newImages.length; k++) {
+				for (let k = 0; k < data.rooms[i].decorations[j].newImages.length && k < 5; k++) {
 					const image = data.rooms[i].decorations[j].newImages[k];
 					const { createReadStream, filename } = await image;
 
@@ -212,7 +212,7 @@ export class StateOfPlayResolver {
 			for (let j = 0; j < data.rooms[i].electricities.length; j++) {
 				console.log('room[' + i + '].electricities[' + j + '] :', data.rooms[i].electricities[j]);
 				
-				for (let k = 0; k < data.rooms[i].electricities[j].newImages.length; k++) {
+				for (let k = 0; k < data.rooms[i].electricities[j].newImages.length && k < 5; k++) {
 					const image = data.rooms[i].electricities[j].newImages[k];
 					const { createReadStream, filename } = await image;
 
@@ -225,7 +225,7 @@ export class StateOfPlayResolver {
 			for (let j = 0; j < data.rooms[i].equipments.length; j++) {
 				console.log('room[' + i + '].equipments[' + j + '] :', data.rooms[i].equipments[j]);
 				
-				for (let k = 0; k < data.rooms[i].equipments[j].newImages.length; k++) {
+				for (let k = 0; k < data.rooms[i].equipments[j].newImages.length && k < 5; k++) {
 					const image = data.rooms[i].equipments[j].newImages[k];
 					const { createReadStream, filename } = await image;
 
@@ -238,7 +238,7 @@ export class StateOfPlayResolver {
 
 		for (let i = 0; i < data.meters.length; i++) {
 				
-			for (let j = 0; j < data.meters[i].newImages.length; j++) {
+			for (let j = 0; j < data.meters[i].newImages.length && j < 5; j++) {
 				const image = data.meters[i].newImages[j];
 				const { createReadStream, filename } = await image;
 
@@ -249,7 +249,7 @@ export class StateOfPlayResolver {
 
 		for (let i = 0; i < data.keys.length; i++) {
 				
-			for (let j = 0; j < data.keys[i].newImages.length; j++) {
+			for (let j = 0; j < data.keys[i].newImages.length && j < 5; j++) {
 				const image = data.keys[i].newImages[j];
 				const { createReadStream, filename } = await image;
 
@@ -374,7 +374,7 @@ export class StateOfPlayResolver {
 			for (let j = 0; j < data.rooms[i].decorations.length; j++) {
 				console.log('room[' + i + '].decorations[' + j + '] :', data.rooms[i].decorations[j]);
 				
-				for (let k = 0; k < data.rooms[i].decorations[j].newImages.length; k++) {
+				for (let k = 0; k < data.rooms[i].decorations[j].newImages.length && k < 5; k++) {
 					const image = data.rooms[i].decorations[j].newImages[k];
 					const { createReadStream, filename } = await image;
 
@@ -387,7 +387,7 @@ export class StateOfPlayResolver {
 			for (let j = 0; j < data.rooms[i].electricities.length; j++) {
 				console.log('room[' + i + '].electricities[' + j + '] :', data.rooms[i].electricities[j]);
 				
-				for (let k = 0; k < data.rooms[i].electricities[j].newImages.length; k++) {
+				for (let k = 0; k < data.rooms[i].electricities[j].newImages.length && k < 5; k++) {
 					const image = data.rooms[i].electricities[j].newImages[k];
 					const { createReadStream, filename } = await image;
 
@@ -400,7 +400,7 @@ export class StateOfPlayResolver {
 			for (let j = 0; j < data.rooms[i].equipments.length; j++) {
 				console.log('room[' + i + '].equipments[' + j + '] :', data.rooms[i].equipments[j]);
 				
-				for (let k = 0; k < data.rooms[i].equipments[j].newImages.length; k++) {
+				for (let k = 0; k < data.rooms[i].equipments[j].newImages.length && k < 5; k++) {
 					const image = data.rooms[i].equipments[j].newImages[k];
 					const { createReadStream, filename } = await image;
 
@@ -413,7 +413,7 @@ export class StateOfPlayResolver {
 
 		for (let i = 0; i < data.meters.length; i++) {
 				
-			for (let j = 0; j < data.meters[i].newImages.length; j++) {
+			for (let j = 0; j < data.meters[i].newImages.length && j < 5; j++) {
 				const image = data.meters[i].newImages[j];
 				const { createReadStream, filename } = await image;
 
@@ -424,7 +424,7 @@ export class StateOfPlayResolver {
 
 		for (let i = 0; i < data.keys.length; i++) {
 				
-			for (let j = 0; j < data.keys[i].newImages.length; j++) {
+			for (let j = 0; j < data.keys[i].newImages.length && j < 5; j++) {
 				const image = data.keys[i].newImages[j];
 				const { createReadStream, filename } = await image;
 
