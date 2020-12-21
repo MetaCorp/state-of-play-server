@@ -33,6 +33,30 @@ export class User extends BaseEntity {
     return `${parent.firstName} ${parent.lastName}`;
   }
 
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  documentHeader: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  documentEnd: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  address: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  postalCode: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  city: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  company: string;
+
   @Column()
   password: string;
 

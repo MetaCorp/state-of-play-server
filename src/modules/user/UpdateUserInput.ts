@@ -1,11 +1,37 @@
 import { Field, InputType } from "type-graphql";
-import { CreateUserInput } from "./CreateUserInput";
+import { Length } from "class-validator";
 
 @InputType()
-export class UpdateUserInput {  
+export class UpdateUserInput {
     @Field()
-    userId: string;
+    @Length(1, 255)
+    firstName: string;
+  
+    @Field()
+    @Length(1, 255)
+    lastName: string;
 
-    @Field()
-    user: CreateUserInput
+    @Field({ nullable: true })
+    @Length(0, 255)
+    documentHeader: string;
+
+    @Field({ nullable: true })
+    @Length(0, 255)
+    documentEnd: string;
+
+    @Field({ nullable: true })
+    @Length(0, 255)
+    address: string;
+
+    @Field({ nullable: true })
+    @Length(0, 255)
+    postalCode: string;
+
+    @Field({ nullable: true })
+    @Length(0, 255)
+    city: string;
+
+    @Field({ nullable: true })
+    @Length(0, 255)
+    company: string;
 }

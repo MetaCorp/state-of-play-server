@@ -18,12 +18,12 @@ export class UserResolver {
 
 	@Authorized()
 	@Query(() => User, { nullable: true })
-	async user(@Arg("data") data: UserInput, @Ctx() ctx: MyContext,) {
+	async user(@Ctx() ctx: MyContext, @Arg("data", { nullable: true }) data?: UserInput) {
 
 		// console.log(ctx.req.session)// TODO: ne devrait pas être nul
 
 		// @ts-ignore
-		const user = await User.findOne({ id: data.userId || ctx.req.session!.userId }, { relations: ["properties", "stateOfPlays", "stateOfPlays.property"] })
+		const user = await User.findOne({ id: (data && data.userId) || ctx.userId }, { relations: ["properties", "stateOfPlays", "stateOfPlays.property"] })
 		if (!user) return
 
 		// console.log('properties: ', user.properties)
@@ -33,11 +33,19 @@ export class UserResolver {
 
 	@Authorized()
 	@Mutation(() => Int)
-	async updateUser(@Arg("data") data: UpdateUserInput) {
+	async updateUser(@Arg("data") data: UpdateUserInput, @Ctx() ctx: MyContext) {
+		
+		console.log('updateUser: ', data)
 
-		const user = await User.update(data.userId, {
-			firstName: data.user.firstName,
-			lastName: data.user.lastName
+		const user = await User.update(ctx.userId.toString(), {
+			firstName: data.firstName,
+			lastName: data.lastName,
+			company: data.company,
+			address: data.address,
+			postalCode: data.postalCode,
+			documentHeader: data.documentHeader,
+			documentEnd: data.documentEnd,
+			city: data.city,
 		})
 		console.log('updateOwner: ', user)
 
