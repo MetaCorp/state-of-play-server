@@ -57,6 +57,10 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   company: string;
 
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  paidOnce: boolean;
+
   @Column()
   password: string;
 

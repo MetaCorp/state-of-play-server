@@ -66,4 +66,21 @@ export class UserResolver {
 
 		return 1
 	}
+
+	@Authorized()
+	@Mutation(() => Int)
+	async pay(@Ctx() ctx: MyContext) {
+
+		// @ts-ignore
+		const user = await User.findOne({ id: ctx.userId })
+
+		if (!user)
+			return 0
+
+		user.paidOnce = !user.paidOnce
+
+		await user.save();
+		
+		return 1
+	}
 }
