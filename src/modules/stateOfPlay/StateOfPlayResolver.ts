@@ -137,9 +137,12 @@ export class StateOfPlayResolver {
 		}
 
 		// @ts-ignore
-		const user = await User.findOne({ id: ctx.userId })
+		const user = await User.findOne({ id: ctx.userId }, { relations: ["stateOfPlays"] })
 		if (!user) return
 		console.log('user: ', user)
+
+		if (!user.paidOnce && user.stateOfPlays.length > 0)
+			return
 
 		// @ts-ignore
 		var owner = data.owner.id && await Owner.findOne({ id: data.owner.id })
@@ -320,7 +323,7 @@ export class StateOfPlayResolver {
 			if (data.rooms[i].equipments.length > MAX_ENTITIES)
 				return
 		}
-		
+
 		// @ts-ignore
 		const user = await User.findOne({ id: ctx.userId })
 		if (!user) return
