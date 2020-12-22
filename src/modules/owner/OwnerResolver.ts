@@ -25,7 +25,7 @@ export class OwnerResolver {
                 { firstName: ILike("%" + filter.search + "%") },
             ] : [],
 			order: { lastName: 'ASC', firstName: 'ASC' },
-			relations: ["user"]
+			relations: ["user", "stateOfPlays"]
         })
 	}
 
@@ -33,7 +33,7 @@ export class OwnerResolver {
 	async owner(@Arg("data") data: OwnerInput) {
 
 		// @ts-ignore
-		const owner = await Owner.findOne({ id: data.ownerId }, { relations: ["user"] })
+		const owner = await Owner.findOne({ id: data.ownerId }, { relations: ["user", "stateOfPlays"] })
 		if (!owner) return
 
 

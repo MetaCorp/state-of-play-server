@@ -25,7 +25,7 @@ export class RepresentativeResolver {
                 { firstName: ILike("%" + filter.search + "%") },
             ] : [],
 			order: { lastName: 'ASC', firstName: 'ASC' },
-			relations: ["user"]
+			relations: ["user", "stateOfPlays"]
         })
 	}
 
@@ -34,7 +34,7 @@ export class RepresentativeResolver {
 	async representative(@Arg("data") data: RepresentativeInput) {
 
 		// @ts-ignore
-		const representative = await Representative.findOne({ id: data.representativeId }, { relations: ["user"] })
+		const representative = await Representative.findOne({ id: data.representativeId }, { relations: ["user", "stateOfPlays"] })
 		if (!representative) return
 
 		return representative;

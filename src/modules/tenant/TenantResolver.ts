@@ -25,7 +25,7 @@ export class TenantResolver {
                 { firstName: ILike("%" + filter.search + "%") },
             ] : [],
 			order: { lastName: 'ASC', firstName: 'ASC' },
-			relations: ["user"]
+			relations: ["user", "stateOfPlays"]
         })
 	}
 
@@ -34,7 +34,7 @@ export class TenantResolver {
 	async tenant(@Arg("data") data: TenantInput) {
 
 		// @ts-ignore
-		const tenant = await Tenant.findOne({ id: data.tenantId }, { relations: ["user"] })
+		const tenant = await Tenant.findOne({ id: data.tenantId }, { relations: ["user", "stateOfPlays"] })
 		if (!tenant) return
 
 		return tenant;

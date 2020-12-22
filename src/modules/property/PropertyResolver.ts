@@ -28,7 +28,7 @@ export class PropertyResolver {
             ] : [
 				{ user: { id: ctx.userId } }
 			],// TODO: OrderInput
-			relations: ["user"]
+			relations: ["user", "stateOfPlays"]
 		})
 	}
 
@@ -39,7 +39,7 @@ export class PropertyResolver {
 		// console.log(ctx.req.session)// TODO: ne devrait pas être nul
 		
 		// @ts-ignore
-		const property = await Property.findOne({ id: data.propertyId }, { relations: ["user"] })
+		const property = await Property.findOne({ id: data.propertyId }, { relations: ["user", "stateOfPlays"] })
 		if (!property) return
 
 		// console.log('properties: ', property.properties)
