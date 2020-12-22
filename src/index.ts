@@ -16,7 +16,8 @@ const jwt = require("express-jwt");
 
 import { createSchema } from "./utils/createSchema";
 
-import './utils/createAWS';
+// import './utils/createAWS';
+import './utils/GCS';
 
 // ID de clé d'accès :
 // AKIAJKVUXSE567WOAJTQ

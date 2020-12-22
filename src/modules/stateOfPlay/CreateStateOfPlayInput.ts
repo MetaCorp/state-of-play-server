@@ -6,6 +6,11 @@ import { CreateOwnerInput } from "../owner/CreateOwnerInput";
 import { CreatePropertyInput } from "../property/CreatePropertyInput";
 import { CreateRepresentativeInput } from "../representative/CreateRepresentativeInput";
 import { CreateTenantInput } from "../tenant/CreateTenantInput";
+import { ArrayMaxSize } from "class-validator";
+
+const MAX_IMAGES = 5;
+const MAX_ENTITIES = 15;
+const MAX_ROOMS = 10;
 
 @InputType()
 class CreateStateOfPlayDecorationInput {
@@ -22,9 +27,11 @@ class CreateStateOfPlayDecorationInput {
   comments: String
 
   @Field(() => [String])
+  @ArrayMaxSize(MAX_IMAGES)
   images: [String]
 
   @Field(() => [GraphQLUpload])
+  @ArrayMaxSize(MAX_IMAGES)
   newImages: [FileUpload]
 }
 
@@ -44,9 +51,11 @@ class CreateStateOfPlayElectricityInput {
   comments: String
 
   @Field(() => [String])
+  @ArrayMaxSize(MAX_IMAGES)
   images: [String]
 
   @Field(() => [GraphQLUpload])
+  @ArrayMaxSize(MAX_IMAGES)
   newImages: [FileUpload]
 }
 
@@ -68,9 +77,11 @@ class CreateStateOfPlayEquipmentInput {
   comments: String
 
   @Field(() => [String])
+  @ArrayMaxSize(MAX_IMAGES)
   images: [String]
 
   @Field(() => [GraphQLUpload])
+  @ArrayMaxSize(MAX_IMAGES)
   newImages: [FileUpload]
 }
 
@@ -89,9 +100,11 @@ class CreateStateOfPlayMeterInput {
   dateOfSuccession: String
 
   @Field(() => [String])
+  @ArrayMaxSize(MAX_IMAGES)
   images: [String]
 
   @Field(() => [GraphQLUpload])
+  @ArrayMaxSize(MAX_IMAGES)
   newImages: [FileUpload]
 }
 
@@ -107,9 +120,11 @@ class CreateStateOfPlayKeyInput {
   quantity: Number
 
   @Field(() => [String])
+  @ArrayMaxSize(MAX_IMAGES)
   images: [String]
 
   @Field(() => [GraphQLUpload])
+  @ArrayMaxSize(MAX_IMAGES)
   newImages: [FileUpload]
 }
 
@@ -120,12 +135,15 @@ class CreateStateOfPlayRoomInput {
   name: String
 
   @Field(() => [CreateStateOfPlayDecorationInput])
+  @ArrayMaxSize(MAX_ENTITIES)
   decorations: [CreateStateOfPlayDecorationInput]
 
   @Field(() => [CreateStateOfPlayElectricityInput])
+  @ArrayMaxSize(MAX_ENTITIES)
   electricities: [CreateStateOfPlayElectricityInput]
 
   @Field(() => [CreateStateOfPlayEquipmentInput])
+  @ArrayMaxSize(MAX_ENTITIES)
   equipments: [CreateStateOfPlayEquipmentInput]
 }
 
@@ -162,12 +180,15 @@ export class CreateStateOfPlayInput {// TODO
   tenants: [CreateTenantInput]
 
   @Field(() => [CreateStateOfPlayRoomInput])
+  @ArrayMaxSize(MAX_ROOMS)
   rooms: [CreateStateOfPlayRoomInput]
   
   @Field(() => [CreateStateOfPlayMeterInput])
+  @ArrayMaxSize(MAX_ENTITIES)
   meters: [CreateStateOfPlayMeterInput]
 
   @Field(() => [CreateStateOfPlayKeyInput])
+  @ArrayMaxSize(MAX_ENTITIES)
   keys: [CreateStateOfPlayKeyInput]
 
   @Field(() => CreateStateOfPlayInsuranceInput)

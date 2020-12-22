@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { sign } from "jsonwebtoken";
 
 import { User } from "../../entity/User";
+// import { Decoration } from "../../entity/Decoration";
 import { RegisterInput } from "./register/RegisterInput";
 import { isAuth } from "../middleware/isAuth";
 import { logger } from "../middleware/logger";
@@ -34,6 +35,8 @@ export class RegisterResolver {
       email,
       password: hashedPassword
     }).save();
+
+    // Decoration.save()
 
     // await sendEmail(email, await createConfirmationUrl(user.id));
 

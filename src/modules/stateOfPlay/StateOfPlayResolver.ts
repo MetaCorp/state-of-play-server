@@ -21,11 +21,10 @@ import { Tenant } from "../../entity/Tenant";
 import { GraphQLUpload, FileUpload } from "graphql-upload";
 // import { createWriteStream } from "fs";
 
-import { uploadFile } from '../../utils/createAWS';
+// import { uploadFile } from '../../utils/createAWS';
+import { uploadFile } from '../../utils/GCS';
 
 const MAX_IMAGES = 5
-const MAX_ROOMS = 10
-const MAX_ENTITIES = 15
 
 @Resolver()
 export class StateOfPlayResolver {
@@ -121,20 +120,6 @@ export class StateOfPlayResolver {
 	@Authorized()
 	@Mutation(() => StateOfPlay, { nullable: true })
 	async createStateOfPlay(@Arg("data") data: CreateStateOfPlayInput, @Ctx() ctx: MyContext) {
-
-		if (data.rooms.length > MAX_ROOMS)
-			return
-		
-		for (let i = 0; i < data.rooms.length; i++) {
-			if (data.rooms[i].decorations.length > MAX_ENTITIES)
-				return
-
-			if (data.rooms[i].electricities.length > MAX_ENTITIES)
-				return
-
-			if (data.rooms[i].equipments.length > MAX_ENTITIES)
-				return
-		}
 
 		// @ts-ignore
 		const user = await User.findOne({ id: ctx.userId }, { relations: ["stateOfPlays"] })
@@ -310,20 +295,6 @@ export class StateOfPlayResolver {
 	@Mutation(() => Int)
 	async updateStateOfPlay(@Arg("data") data: UpdateStateOfPlayInput, @Ctx() ctx: MyContext) {
 
-		if (data.rooms.length > MAX_ROOMS)
-			return
-		
-		for (let i = 0; i < data.rooms.length; i++) {
-			if (data.rooms[i].decorations.length > MAX_ENTITIES)
-				return
-
-			if (data.rooms[i].electricities.length > MAX_ENTITIES)
-				return
-
-			if (data.rooms[i].equipments.length > MAX_ENTITIES)
-				return
-		}
-
 		// @ts-ignore
 		const user = await User.findOne({ id: ctx.userId })
 		if (!user) return
@@ -407,8 +378,10 @@ export class StateOfPlayResolver {
 			
 			for (let j = 0; j < data.rooms[i].decorations.length; j++) {
 				console.log('room[' + i + '].decorations[' + j + '] :', data.rooms[i].decorations[j]);
+
+				const imagesCount = data.rooms[i].decorations[j].images.length;
 				
-				for (let k = 0; k < data.rooms[i].decorations[j].newImages.length && k < MAX_IMAGES; k++) {
+				for (let k = 0; k < data.rooms[i].decorations[j].newImages.length && k < MAX_IMAGES - imagesCount; k++) {
 					const image = data.rooms[i].decorations[j].newImages[k];
 					const { createReadStream, filename } = await image;
 
@@ -420,8 +393,10 @@ export class StateOfPlayResolver {
 				
 			for (let j = 0; j < data.rooms[i].electricities.length; j++) {
 				console.log('room[' + i + '].electricities[' + j + '] :', data.rooms[i].electricities[j]);
+
+				const imagesCount = data.rooms[i].electricities[j].images.length;
 				
-				for (let k = 0; k < data.rooms[i].electricities[j].newImages.length && k < MAX_IMAGES; k++) {
+				for (let k = 0; k < data.rooms[i].electricities[j].newImages.length && k < MAX_IMAGES - imagesCount; k++) {
 					const image = data.rooms[i].electricities[j].newImages[k];
 					const { createReadStream, filename } = await image;
 
@@ -434,7 +409,10 @@ export class StateOfPlayResolver {
 			for (let j = 0; j < data.rooms[i].equipments.length; j++) {
 				console.log('room[' + i + '].equipments[' + j + '] :', data.rooms[i].equipments[j]);
 				
-				for (let k = 0; k < data.rooms[i].equipments[j].newImages.length && k < MAX_IMAGES; k++) {
+				const imagesCount = data.rooms[i].equipments[j].images.length;
+				
+
+				for (let k = 0; k < data.rooms[i].equipments[j].newImages.length && k < MAX_IMAGES - imagesCount; k++) {
 					const image = data.rooms[i].equipments[j].newImages[k];
 					const { createReadStream, filename } = await image;
 
@@ -446,8 +424,10 @@ export class StateOfPlayResolver {
 		}
 
 		for (let i = 0; i < data.meters.length; i++) {
+
+			const imagesCount = data.meters[i].images.length;
 				
-			for (let j = 0; j < data.meters[i].newImages.length && j < MAX_IMAGES; j++) {
+			for (let j = 0; j < data.meters[i].newImages.length && j < MAX_IMAGES - imagesCount; j++) {
 				const image = data.meters[i].newImages[j];
 				const { createReadStream, filename } = await image;
 
@@ -457,8 +437,10 @@ export class StateOfPlayResolver {
 		}
 
 		for (let i = 0; i < data.keys.length; i++) {
+
+			const imagesCount = data.keys[i].images.length;
 				
-			for (let j = 0; j < data.keys[i].newImages.length && j < MAX_IMAGES; j++) {
+			for (let j = 0; j < data.keys[i].newImages.length && j < MAX_IMAGES - imagesCount; j++) {
 				const image = data.keys[i].newImages[j];
 				const { createReadStream, filename } = await image;
 
