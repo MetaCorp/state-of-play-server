@@ -21,6 +21,6 @@ export const uploadFile = (fileName : any, fileContent : any) => new Promise((re
             gzip: true
         })
         )
-        .on("finish", () => resolve('https://storage.cloud.google.com/' + bucketName + '/' + fileName))
+        .on("finish", () => resolve('https://storage.googleapis.com/' + bucketName + '/' + fileName))
   
 })
