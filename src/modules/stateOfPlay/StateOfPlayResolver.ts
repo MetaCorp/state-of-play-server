@@ -37,7 +37,6 @@ export class StateOfPlayResolver {
 		const locations = []
 
 		const mapFiles = async (file : any) => {
-			const { createReadStream, filename } = await file;
 			// const writableStream = createWriteStream(
 			// 	`${__dirname}/${filename}`,
 			// 	{ autoClose: true }
@@ -52,6 +51,7 @@ export class StateOfPlayResolver {
 			// });
 
 			// await promise;
+			const { createReadStream, filename } = await file;
 
 			locations.push(await uploadFile(filename, createReadStream()))
 		}

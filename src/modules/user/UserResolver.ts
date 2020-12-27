@@ -7,6 +7,9 @@ import { DeleteUserInput } from "./DeleteUserInput";
 
 import { User } from "../../entity/User";
 
+import { uploadFile } from '../../utils/GCS';
+
+
 @Resolver()
 export class UserResolver {
 
@@ -37,7 +40,7 @@ export class UserResolver {
 		
 		console.log('updateUser: ', data)
 
-		const user = await User.update(ctx.userId.toString(), {
+		const newUser : any = {
 			firstName: data.firstName,
 			lastName: data.lastName,
 			company: data.company,
@@ -46,7 +49,16 @@ export class UserResolver {
 			documentHeader: data.documentHeader,
 			documentEnd: data.documentEnd,
 			city: data.city,
-		})
+		}
+
+		if (data.newLogo) {
+			const { createReadStream, filename } = await data.newLogo;
+
+			newUser.logo = await uploadFile(filename, createReadStream())
+			console.log('newUser.logo: ', newUser.logo)
+		}
+
+		const user = await User.update(ctx.userId.toString(), newUser)
 		console.log('updateOwner: ', user)
 
 		if (user.affected !== 1) return 0
