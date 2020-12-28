@@ -18,11 +18,11 @@ import { User } from "../../entity/User";
 export class MeterResolver {
 	@Authorized()
 	@Query(() => [Meter])
-	meters(@Arg("filter", { nullable: true }) filter?: MetersFilterInput) {
+	meters(@Ctx() ctx: MyContext, @Arg("filter", { nullable: true }) filter?: MetersFilterInput) {
 		return Meter.find({
             where: filter ? [
-                { type: ILike("%" + filter.search + "%") },
-            ] : [],
+                { type: ILike("%" + filter.search + "%"), user: { id: ctx.userId }  },
+            ] : [{ user: { id: ctx.userId } }],
 			order: { type: 'ASC' },
 			relations: ["user"]
         })

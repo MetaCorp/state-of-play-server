@@ -18,11 +18,11 @@ import { User } from "../../entity/User";
 export class DecorationResolver {
 	@Authorized()
 	@Query(() => [Decoration])
-	decorations(@Arg("filter", { nullable: true }) filter?: DecorationsFilterInput) {
+	decorations(@Ctx() ctx: MyContext, @Arg("filter", { nullable: true }) filter?: DecorationsFilterInput) {
 		return Decoration.find({
             where: filter ? [
-                { type: ILike("%" + filter.search + "%") },
-            ] : [],
+                { type: ILike("%" + filter.search + "%"), user: { id: ctx.userId } },
+            ] : [{ user: { id: ctx.userId } }],
 			order: { type: 'ASC' },
 			relations: ["user"]
         })
@@ -42,8 +42,6 @@ export class DecorationResolver {
 	@Authorized()
 	@Mutation(() => Decoration, { nullable: true })
 	async createDecoration(@Arg("data") data: CreateDecorationInput, @Ctx() ctx: MyContext) {
-
-		console.log(ctx.req.session)// TODO: ne devrait pas être nul
 
 		// @ts-ignore
 		const user = await User.findOne({ id: ctx.userId })

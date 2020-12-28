@@ -18,11 +18,11 @@ import { User } from "../../entity/User";
 export class EquipmentResolver {
 	@Authorized()
 	@Query(() => [Equipment])
-	equipments(@Arg("filter", { nullable: true }) filter?: EquipmentsFilterInput) {
+	equipments(@Ctx() ctx: MyContext, @Arg("filter", { nullable: true }) filter?: EquipmentsFilterInput) {
 		return Equipment.find({
             where: filter ? [
-                { type: ILike("%" + filter.search + "%") },
-            ] : [],
+                { type: ILike("%" + filter.search + "%"), user: { id: ctx.userId }  },
+            ] : [{ user: { id: ctx.userId } }],
 			order: { type: 'ASC' },
 			relations: ["user"]
         })
@@ -42,8 +42,6 @@ export class EquipmentResolver {
 	@Authorized()
 	@Mutation(() => Equipment, { nullable: true })
 	async createEquipment(@Arg("data") data: CreateEquipmentInput, @Ctx() ctx: MyContext) {
-
-		console.log(ctx.req.session)// TODO: ne devrait pas être nul
 
 		// @ts-ignore
 		const user = await User.findOne({ id: ctx.userId })

@@ -142,7 +142,7 @@ export class StateOfPlayResolver {
 				user: user,
 			}).save();
 		}
-		console.log('owner: ', owner)
+		// console.log('owner: ', owner)
 		
 		// @ts-ignore
 		var representative = data.representative.id && await Representative.findOne({ id: data.representative.id })
@@ -157,7 +157,7 @@ export class StateOfPlayResolver {
 				user: user,
 			}).save();
 		}
-		console.log('representative: ', representative)
+		// console.log('representative: ', representative)
 
 		const tenants = []
 		for(let i = 0; i < data.tenants.length; i++) {
@@ -175,7 +175,7 @@ export class StateOfPlayResolver {
 			}
 			tenants.push(tenant)
 		}
-		console.log('tenants[0]: ', tenants[0])
+		// console.log('tenants[0]: ', tenants[0])
 		
 		// @ts-ignore
 		var property = data.property.id && await Property.findOne({ id: data.property.id })
@@ -195,14 +195,14 @@ export class StateOfPlayResolver {
 				user: user
 			}).save();
 		}
-		console.log('property: ', property)
+		// console.log('property: ', property)
 
-		console.log('data.rooms: ', data.rooms)
+		// console.log('data.rooms: ', data.rooms)
 		for (let i = 0; i < data.rooms.length; i++) {
-			console.log('room[' + i + '] :', data.rooms[i]);
+			// console.log('room[' + i + '] :', data.rooms[i]);
 			
 			for (let j = 0; j < data.rooms[i].decorations.length; j++) {
-				console.log('room[' + i + '].decorations[' + j + '] :', data.rooms[i].decorations[j]);
+				// console.log('room[' + i + '].decorations[' + j + '] :', data.rooms[i].decorations[j]);
 				
 				for (let k = 0; k < data.rooms[i].decorations[j].newImages.length && k < MAX_IMAGES; k++) {
 					const image = data.rooms[i].decorations[j].newImages[k];
@@ -215,7 +215,7 @@ export class StateOfPlayResolver {
 			}
 				
 			for (let j = 0; j < data.rooms[i].electricities.length; j++) {
-				console.log('room[' + i + '].electricities[' + j + '] :', data.rooms[i].electricities[j]);
+				// console.log('room[' + i + '].electricities[' + j + '] :', data.rooms[i].electricities[j]);
 				
 				for (let k = 0; k < data.rooms[i].electricities[j].newImages.length && k < MAX_IMAGES; k++) {
 					const image = data.rooms[i].electricities[j].newImages[k];
@@ -228,7 +228,7 @@ export class StateOfPlayResolver {
 			}
 
 			for (let j = 0; j < data.rooms[i].equipments.length; j++) {
-				console.log('room[' + i + '].equipments[' + j + '] :', data.rooms[i].equipments[j]);
+				// console.log('room[' + i + '].equipments[' + j + '] :', data.rooms[i].equipments[j]);
 				
 				for (let k = 0; k < data.rooms[i].equipments[j].newImages.length && k < MAX_IMAGES; k++) {
 					const image = data.rooms[i].equipments[j].newImages[k];
@@ -263,6 +263,11 @@ export class StateOfPlayResolver {
 			}
 		}
 
+		const { createReadStream, filename } = await data.newPdf;
+		const pdf = await uploadFile(filename, createReadStream())
+
+		console.log('pdf: ', pdf)
+
 		const stateOfPlay = await StateOfPlay.create({
 			fullAddress: property.address + ', ' + property.postalCode + ' ' + property.city,// needed for search (issue nested search doesnt work)
 			ownerFullName: owner.firstName + ' ' + owner.lastName,
@@ -283,7 +288,8 @@ export class StateOfPlayResolver {
 			documentEnd: data.documentEnd,
 			entryExitDate: data.entryExitDate,
 			date: data.date,
-			city: data.city
+			city: data.city,
+			pdf: pdf,
 		}).save();
 		console.log('stateOfPlay: ', stateOfPlay)
 
@@ -449,6 +455,10 @@ export class StateOfPlayResolver {
 			}
 		}
 
+		// TODO: delete old pdf
+		const { createReadStream, filename } = await data.newPdf;
+		const pdf = await uploadFile(filename, createReadStream())
+
 
 		stateOfPlay2.fullAddress = property.address + ', ' + property.postalCode + ' ' + property.city// needed for search (issue nested search doesnt work)
 		stateOfPlay2.ownerFullName = owner.firstName + ' ' + owner.lastName
@@ -471,6 +481,7 @@ export class StateOfPlayResolver {
 		stateOfPlay2.entryExitDate = data.entryExitDate
 		stateOfPlay2.date = data.date
 		stateOfPlay2.city = data.city
+		stateOfPlay2.pdf = pdf
 
 		const ret = await connection.getRepository(StateOfPlay).save(stateOfPlay2)
 

@@ -191,4 +191,7 @@ export class UpdateStateOfPlayInput {
 
     @Field()
     city: String
+
+    @Field(() => GraphQLUpload)
+    newPdf: FileUpload
 }

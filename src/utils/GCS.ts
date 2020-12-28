@@ -11,7 +11,7 @@ const gc = new Cloud.Storage({
 const bucketName = 'state-of-play'
 const bucket = gc.bucket(bucketName)
 
-export const uploadFile = (fileName : any, fileContent : any) => new Promise((resolve) => {
+export const uploadFile = (fileName : any, fileContent : any) : Promise<String> => new Promise((resolve) => {
     console.log('uploadFile: ' + fileName)
 
     fileContent

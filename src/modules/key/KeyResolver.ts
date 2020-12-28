@@ -18,11 +18,11 @@ import { User } from "../../entity/User";
 export class KeyResolver {
 	@Authorized()
 	@Query(() => [Key])
-	keys(@Arg("filter", { nullable: true }) filter?: KeysFilterInput) {
+	keys(@Ctx() ctx: MyContext, @Arg("filter", { nullable: true }) filter?: KeysFilterInput) {
 		return Key.find({
             where: filter ? [
-                { type: ILike("%" + filter.search + "%") },
-            ] : [],
+                { type: ILike("%" + filter.search + "%"), user: { id: ctx.userId } },
+            ] : [{ user: { id: ctx.userId } }],
 			order: { type: 'ASC' },
 			relations: ["user"]
         })
@@ -42,8 +42,6 @@ export class KeyResolver {
 	@Authorized()
 	@Mutation(() => Key, { nullable: true })
 	async createKey(@Arg("data") data: CreateKeyInput, @Ctx() ctx: MyContext) {
-
-		console.log(ctx.req.session)// TODO: ne devrait pas être nul
 
 		// @ts-ignore
 		const user = await User.findOne({ id: ctx.userId })

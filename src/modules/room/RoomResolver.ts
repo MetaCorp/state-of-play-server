@@ -18,11 +18,11 @@ import { User } from "../../entity/User";
 export class RoomResolver {
 	@Authorized()
 	@Query(() => [Room])
-	rooms(@Arg("filter", { nullable: true }) filter?: RoomsFilterInput) {
+	rooms(@Ctx() ctx: MyContext, @Arg("filter", { nullable: true }) filter?: RoomsFilterInput) {
 		return Room.find({
             where: filter ? [
-                { name: ILike("%" + filter.search + "%") },
-            ] : [],
+                { name: ILike("%" + filter.search + "%"), user: { id: ctx.userId } },
+            ] : [{ user: { id: ctx.userId } }],
 			order: { name: 'ASC' },
 			relations: ["user"]
         })

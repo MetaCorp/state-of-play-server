@@ -4,12 +4,24 @@ import bcrypt from "bcryptjs";
 import { sign } from "jsonwebtoken";
 
 import { User } from "../../entity/User";
-// import { Decoration } from "../../entity/Decoration";
+
+import { Room } from "../../entity/Room";
+import { Decoration } from "../../entity/Decoration";
+import { Electricity } from "../../entity/Electricity";
+import { Meter } from "../../entity/Meter";
+import { Key } from "../../entity/Key";
+
 import { RegisterInput } from "./register/RegisterInput";
 import { isAuth } from "../middleware/isAuth";
 import { logger } from "../middleware/logger";
 // import { sendEmail } from "../utils/sendEmail";
 // import { createConfirmationUrl } from "../utils/createConfirmationUrl";
+
+import rooms from '../../data/rooms.json';
+import decorations from '../../data/decorations.json';
+import electricities from '../../data/electricities.json';
+import meters from '../../data/meters.json';
+import keys from '../../data/keys.json';
 
 @Resolver()
 export class RegisterResolver {
@@ -41,6 +53,35 @@ Le présent état des lieux établi contradictoirement entre les parties qui le 
     }).save();
 
     // Decoration.save()
+    // @ts-ignore
+    Room.save(rooms.map(room => ({
+      name: room,
+      user: user
+    })))
+
+    // @ts-ignore
+    Decoration.save(decorations.map(decoration => ({
+      type: decoration,
+      user: user
+    })))
+
+    // @ts-ignore
+    Electricity.save(electricities.map(electricity => ({
+      type: electricity,
+      user: user
+    })))
+
+    // @ts-ignore
+    Meter.save(meters.map(meter => ({
+      type: meter,
+      user: user
+    })))
+
+    // @ts-ignore
+    Key.save(keys.map(key => ({
+      type: key,
+      user: user
+    })))
 
     // await sendEmail(email, await createConfirmationUrl(user.id));
 

@@ -74,6 +74,10 @@ export class StateOfPlay extends BaseEntity {
   @Column()
   out: Boolean
 
+  @Field(() => String)
+  @Column()
+  pdf: String
+
   @Field(() => Owner)
   @ManyToOne(() => Owner, owner => owner.stateOfPlays, { cascade: true, onDelete: "CASCADE" })
   owner: Owner
