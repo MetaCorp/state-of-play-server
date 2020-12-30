@@ -65,6 +65,10 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   paidOnce: boolean;
 
+  @Field()
+  @Column({ default: 0 })
+  credits: number;
+
   @Column()
   password: string;
 

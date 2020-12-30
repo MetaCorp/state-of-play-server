@@ -74,8 +74,8 @@ export class StateOfPlay extends BaseEntity {
   @Column()
   out: Boolean
 
-  @Field(() => String)
-  @Column()
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
   pdf: String
 
   @Field(() => Owner)

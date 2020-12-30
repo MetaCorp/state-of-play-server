@@ -126,8 +126,11 @@ export class StateOfPlayResolver {
 		if (!user) return
 		console.log('user: ', user)
 
-		if (!user.paidOnce && user.stateOfPlays.length > 0)
+		// TODO : abonnement
+		if (!user.paidOnce && user.stateOfPlays.length > 0 || user.credits == 0)
 			return
+		
+		user.credits = user.credits - 1
 
 		// @ts-ignore
 		var owner = data.owner.id && await Owner.findOne({ id: data.owner.id })
@@ -263,8 +266,11 @@ export class StateOfPlayResolver {
 			}
 		}
 
-		const { createReadStream, filename } = await data.newPdf;
-		const pdf = await uploadFile(filename, createReadStream())
+		let pdf;
+		if (data.newPdf) {
+			const { createReadStream, filename } = await data.newPdf;
+			pdf = await uploadFile(filename, createReadStream())
+		}
 
 		console.log('pdf: ', pdf)
 
@@ -292,6 +298,8 @@ export class StateOfPlayResolver {
 			pdf: pdf,
 		}).save();
 		console.log('stateOfPlay: ', stateOfPlay)
+
+		await user.save();// Save pour update les crédits
 
 		// await stateOfPlay.save();
 		return stateOfPlay;

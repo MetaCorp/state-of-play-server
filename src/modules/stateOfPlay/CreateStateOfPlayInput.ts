@@ -215,6 +215,6 @@ export class CreateStateOfPlayInput {// TODO
   @Field()
   city: String
 
-  @Field(() => GraphQLUpload)
-  newPdf: FileUpload
+  @Field(() => GraphQLUpload, { nullable: true })
+  newPdf?: FileUpload
 }

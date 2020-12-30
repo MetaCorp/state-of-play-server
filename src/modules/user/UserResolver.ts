@@ -4,6 +4,7 @@ import { MyContext } from "../../types/MyContext";
 import { UserInput } from "./UserInput";
 import { UpdateUserInput } from "./UpdateUserInput";
 import { DeleteUserInput } from "./DeleteUserInput";
+import { PayInput } from "./PayInput";
 
 import { User } from "../../entity/User";
 
@@ -81,7 +82,9 @@ export class UserResolver {
 
 	@Authorized()
 	@Mutation(() => Int)
-	async pay(@Ctx() ctx: MyContext) {
+	async pay(@Arg("data") data: PayInput, @Ctx() ctx: MyContext) {
+
+		console.log('pay: ', data)
 
 		// @ts-ignore
 		const user = await User.findOne({ id: ctx.userId })
@@ -89,7 +92,8 @@ export class UserResolver {
 		if (!user)
 			return 0
 
-		user.paidOnce = !user.paidOnce
+		user.paidOnce = true// !user.paidOnce// TODO : = true
+		user.credits = user.credits + data.amount
 
 		await user.save();
 		
