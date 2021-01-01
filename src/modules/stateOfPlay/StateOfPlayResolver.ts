@@ -29,37 +29,37 @@ const MAX_IMAGES = 5
 @Resolver()
 export class StateOfPlayResolver {
 
-	@Mutation(() => [Boolean])
-	async multiUpload(@Arg('files', () => [GraphQLUpload]) files: [FileUpload]) {
+	// @Mutation(() => [Boolean])
+	// async multiUpload(@Arg('files', () => [GraphQLUpload]) files: [FileUpload]) {
 
-		console.log('files : ', files)
+	// 	console.log('files : ', files)
 
-		const locations = []
+	// 	const locations = []
 
-		const mapFiles = async (file : any) => {
-			// const writableStream = createWriteStream(
-			// 	`${__dirname}/${filename}`,
-			// 	{ autoClose: true }
-			// );
+	// 	const mapFiles = async (file : any) => {
+	// 		// const writableStream = createWriteStream(
+	// 		// 	`${__dirname}/${filename}`,
+	// 		// 	{ autoClose: true }
+	// 		// );
 			
 			
-			// const promise = new Promise((res, rej) => {
-			// 	createReadStream()
-			// 		.pipe(writableStream)
-			// 		.on("finish", () => res(true))
-			// 		.on("error", () => rej(false));
-			// });
+	// 		// const promise = new Promise((res, rej) => {
+	// 		// 	createReadStream()
+	// 		// 		.pipe(writableStream)
+	// 		// 		.on("finish", () => res(true))
+	// 		// 		.on("error", () => rej(false));
+	// 		// });
 
-			// await promise;
-			const { createReadStream, filename } = await file;
+	// 		// await promise;
+	// 		const { createReadStream, filename } = await file;
 
-			locations.push(await uploadFile(filename, createReadStream()))
-		}
+	// 		locations.push(await uploadFile(filename, createReadStream()))
+	// 	}
 
-		const ret = files.map(mapFiles)
+	// 	const ret = files.map(mapFiles)
 
-		return ret
-	}
+	// 	return ret
+	// }
 
 	@Authorized()
 	@Query(() => [StateOfPlay])
@@ -122,9 +122,9 @@ export class StateOfPlayResolver {
 	async createStateOfPlay(@Arg("data") data: CreateStateOfPlayInput, @Ctx() ctx: MyContext) {
 
 		// @ts-ignore
-		const user = await User.findOne({ id: ctx.userId }, { relations: ["stateOfPlays"] })
+		const user = await User.findOne({ id: ctx.userId }, { relations: [] })
 		if (!user) return
-		console.log('user: ', user)
+		console.log('createStateOfPlay user: ', user)
 
 		// TODO : abonnement
 		if (!user.paidOnce && user.stateOfPlays.length > 0 || user.credits == 0)
@@ -297,7 +297,8 @@ export class StateOfPlayResolver {
 			city: data.city,
 			pdf: pdf,
 		}).save();
-		console.log('stateOfPlay: ', stateOfPlay)
+		console.log('stateOfPlay saved')
+		// console.log('stateOfPlay: ', stateOfPlay)
 
 		await user.save();// Save pour update les crédits
 
@@ -312,7 +313,7 @@ export class StateOfPlayResolver {
 		// @ts-ignore
 		const user = await User.findOne({ id: ctx.userId })
 		if (!user) return
-		console.log('user: ', user)
+		console.log('updateStateOfPlay user: ', user)
 
 		// @ts-ignore
 		var owner = data.owner.id && await Owner.findOne({ id: data.owner.id })
@@ -327,7 +328,7 @@ export class StateOfPlayResolver {
 				user: user,
 			}).save();
 		}
-		console.log('owner: ', owner)
+		// console.log('owner: ', owner)
 		
 		// @ts-ignore
 		var representative = data.representative.id && await Representative.findOne({ id: data.representative.id })
@@ -342,7 +343,7 @@ export class StateOfPlayResolver {
 				user: user,
 			}).save();
 		}
-		console.log('representative: ', representative)
+		// console.log('representative: ', representative)
 
 		const tenants = []
 		for(let i = 0; i < data.tenants.length; i++) {
@@ -360,7 +361,7 @@ export class StateOfPlayResolver {
 			}
 			tenants.push(tenant)
 		}
-		console.log('tenants[0]: ', tenants[0])
+		// console.log('tenants[0]: ', tenants[0])
 		
 		// @ts-ignore
 		var property = data.property.id && await Property.findOne({ id: data.property.id })
@@ -380,7 +381,7 @@ export class StateOfPlayResolver {
 				user: user
 			}).save();
 		}
-		console.log('property: ', property)
+		// console.log('property: ', property)
 
 		const connection = getConnection();
 

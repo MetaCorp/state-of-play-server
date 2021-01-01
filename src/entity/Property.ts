@@ -31,12 +31,12 @@ export class Property extends BaseEntity {
   @Column()
   reference: String;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true})
+  @Column({ nullable: true })
   lot: String;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true})
+  @Column({ nullable: true})
   floor: number;
 
   @Field()
