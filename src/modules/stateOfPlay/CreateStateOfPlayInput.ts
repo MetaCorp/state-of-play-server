@@ -12,6 +12,8 @@ const MAX_IMAGES = 5;
 const MAX_ENTITIES = 15;
 const MAX_ROOMS = 10;
 
+const MAX_TENANTS = 3;
+
 @InputType()
 class CreateStateOfPlayDecorationInput {
   @Field()
@@ -177,6 +179,7 @@ export class CreateStateOfPlayInput {// TODO
   representative: CreateRepresentativeInput
 
   @Field(() => [CreateTenantInput])
+  @ArrayMaxSize(MAX_TENANTS)
   tenants: [CreateTenantInput]
 
   @Field(() => [CreateStateOfPlayRoomInput])

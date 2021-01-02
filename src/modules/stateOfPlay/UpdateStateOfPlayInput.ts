@@ -7,25 +7,35 @@ import { UpdatePropertyInput } from "../property/UpdatePropertyInput";
 import { UpdateRepresentativeInput } from "../representative/UpdateRepresentativeInput";
 import { UpdateTenantInput } from "../tenant/UpdateTenantInput";
 
+import { ArrayMaxSize } from "class-validator";
+
+const MAX_IMAGES = 5;
+const MAX_ENTITIES = 15;
+const MAX_ROOMS = 10;
+
+const MAX_TENANTS = 3;
+
 @InputType()
 class UpdateStateOfPlayDecorationInput {
-    @Field()
-    type: String
-    
-    @Field()
-    nature: String
-    
-    @Field()
-    state: String
-    
-    @Field()
-    comments: String
-
-    @Field(() => [String])
-    images: [String]
+  @Field()
+  type: String
   
-    @Field(() => [GraphQLUpload])
-    newImages: [FileUpload]
+  @Field()
+  nature: String
+  
+  @Field()
+  state: String
+  
+  @Field()
+  comments: String
+
+  @Field(() => [String])
+  @ArrayMaxSize(MAX_IMAGES)
+  images: [String]
+
+  @Field(() => [GraphQLUpload])
+  @ArrayMaxSize(MAX_IMAGES)
+  newImages: [FileUpload]
 }
 
 @InputType()
@@ -43,9 +53,11 @@ class UpdateStateOfPlayElectricityInput {
   comments: String
 
   @Field(() => [String])
+  @ArrayMaxSize(MAX_IMAGES)
   images: [String]
 
   @Field(() => [GraphQLUpload])
+  @ArrayMaxSize(MAX_IMAGES)
   newImages: [FileUpload]
 }
 
@@ -67,9 +79,11 @@ class UpdateStateOfPlayEquipmentInput {
   comments: String
 
   @Field(() => [String])
+  @ArrayMaxSize(MAX_IMAGES)
   images: [String]
 
   @Field(() => [GraphQLUpload])
+  @ArrayMaxSize(MAX_IMAGES)
   newImages: [FileUpload]
 }
 
@@ -88,9 +102,11 @@ class UpdateStateOfPlayMeterInput {
   dateOfSuccession: String
 
   @Field(() => [String])
+  @ArrayMaxSize(MAX_IMAGES)
   images: [String]
 
   @Field(() => [GraphQLUpload])
+  @ArrayMaxSize(MAX_IMAGES)
   newImages: [FileUpload]
 }
 
@@ -106,25 +122,30 @@ class UpdateStateOfPlayKeyInput {
   quantity: Number
 
   @Field(() => [String])
+  @ArrayMaxSize(MAX_IMAGES)
   images: [String]
 
   @Field(() => [GraphQLUpload])
+  @ArrayMaxSize(MAX_IMAGES)
   newImages: [FileUpload]
 }
 
 @InputType()
 class UpdateStateOfPlayRoomInput {
-    @Field()
-    name: String
+  @Field()
+  name: String
 
-    @Field(() => [UpdateStateOfPlayDecorationInput])
-    decorations: [UpdateStateOfPlayDecorationInput]
+  @Field(() => [UpdateStateOfPlayDecorationInput])
+  @ArrayMaxSize(MAX_ENTITIES)
+  decorations: [UpdateStateOfPlayDecorationInput]
 
-    @Field(() => [UpdateStateOfPlayElectricityInput])
-    electricities: [UpdateStateOfPlayElectricityInput]
-  
-    @Field(() => [UpdateStateOfPlayEquipmentInput])
-    equipments: [UpdateStateOfPlayEquipmentInput]
+  @Field(() => [UpdateStateOfPlayElectricityInput])
+  @ArrayMaxSize(MAX_ENTITIES)
+  electricities: [UpdateStateOfPlayElectricityInput]
+
+  @Field(() => [UpdateStateOfPlayEquipmentInput])
+  @ArrayMaxSize(MAX_ENTITIES)
+  equipments: [UpdateStateOfPlayEquipmentInput]
 }
 
 @InputType()
@@ -144,54 +165,58 @@ class UpdateStateOfPlayInsuranceInput {
 
 @InputType()
 export class UpdateStateOfPlayInput {
-    @Field()
-    id: string;
+  @Field()
+  id: string;
 
-    @Field(() => UpdatePropertyInput)
-    property: UpdatePropertyInput
-    
-    @Field(() => UpdateOwnerInput)
-    owner: UpdateOwnerInput
-    
-    @Field(() => UpdateRepresentativeInput)
-    representative: UpdateRepresentativeInput
-
-    @Field(() => [UpdateTenantInput])
-    tenants: [UpdateTenantInput]
-
-    @Field(() => [UpdateStateOfPlayRoomInput])
-    rooms: [UpdateStateOfPlayRoomInput]
-
-    @Field(() => [UpdateStateOfPlayKeyInput])
-    keys: [UpdateStateOfPlayKeyInput]
+  @Field(() => UpdatePropertyInput)
+  property: UpdatePropertyInput
   
-    @Field(() => [UpdateStateOfPlayMeterInput])
-    meters: [UpdateStateOfPlayMeterInput]
-    
-    @Field(() => UpdateStateOfPlayInsuranceInput)
-    insurance: UpdateStateOfPlayInsuranceInput
-
-    @Field()
-    comments: String
-    
-    @Field()
-    reserve: String
-
-    @Field()
-    documentHeader: String
+  @Field(() => UpdateOwnerInput)
+  owner: UpdateOwnerInput
   
-    @Field()
-    documentEnd: String
+  @Field(() => UpdateRepresentativeInput)
+  representative: UpdateRepresentativeInput
 
-    @Field()
-    entryExitDate: String
+  @Field(() => [UpdateTenantInput])
+  @ArrayMaxSize(MAX_TENANTS)
+  tenants: [UpdateTenantInput]
+
+  @Field(() => [UpdateStateOfPlayRoomInput])
+  @ArrayMaxSize(MAX_ROOMS)
+  rooms: [UpdateStateOfPlayRoomInput]
+
+  @Field(() => [UpdateStateOfPlayKeyInput])
+  @ArrayMaxSize(MAX_ENTITIES)
+  keys: [UpdateStateOfPlayKeyInput]
+
+  @Field(() => [UpdateStateOfPlayMeterInput])
+  @ArrayMaxSize(MAX_ENTITIES)
+  meters: [UpdateStateOfPlayMeterInput]
   
-    @Field()
-    date: String
+  @Field(() => UpdateStateOfPlayInsuranceInput)
+  insurance: UpdateStateOfPlayInsuranceInput
 
-    @Field()
-    city: String
+  @Field()
+  comments: String
+  
+  @Field()
+  reserve: String
 
-    @Field(() => GraphQLUpload)
-    newPdf: FileUpload
+  @Field()
+  documentHeader: String
+
+  @Field()
+  documentEnd: String
+
+  @Field()
+  entryExitDate: String
+
+  @Field()
+  date: String
+
+  @Field()
+  city: String
+
+  @Field(() => GraphQLUpload)
+  newPdf: FileUpload
 }
