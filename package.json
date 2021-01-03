@@ -41,6 +41,7 @@
     "nodemailer": "^5.1.1",
     "pg": "^7.7.1",
     "reflect-metadata": "^0.1.12",
+    "stripe": "^8.129.0",
     "ts-node": "^7.0.1",
     "ts-node-dev": "^1.0.0-pre.32",
     "type-graphql": "^0.18.0-beta.17",

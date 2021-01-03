@@ -5,11 +5,14 @@ import { UserInput } from "./UserInput";
 import { UpdateUserInput } from "./UpdateUserInput";
 import { DeleteUserInput } from "./DeleteUserInput";
 import { PayInput } from "./PayInput";
+import { StripePIInput } from "./StripePIInput";
 
 import { User } from "../../entity/User";
 
 import { uploadFile } from '../../utils/GCS';
 
+const stripe = require('stripe')('sk_test_51I5BaICPxFg6weCstvnEDYMpJUaSqoqrIznXGkPcvwD5rvOIQKmnTubo5ogQxLC4lqS3YMq5MSScBWxGuf8LuUt700wDFMrZ4r')
+const stripeClientId = 'acct_1I5JONEgk3XYqoy9'
 
 @Resolver()
 export class UserResolver {
@@ -99,4 +102,69 @@ export class UserResolver {
 		
 		return 1
 	}
+
+	@Authorized()
+	@Query(() => String)
+	async stripePI(@Arg("data") data: StripePIInput) {
+		return new Promise((res) => {
+
+			stripe.paymentMethods.create({
+				payment_method: data.paym,
+			}, {
+				stripeAccount: stripeClientId
+			},
+			(err : any, clonedPaymentMethod : any) => {
+				if (err !== null) {
+					console.log('Error clone: ', err);
+					// res.send('error');
+					res("")
+				} else {
+					console.log('clonedPaymentMethod: ', clonedPaymentMethod);
+	
+					const fee = (data.amount/100) | 0;
+					stripe.paymentIntents.create({
+						amount: data.amount,
+						currency: "EUR",
+						payment_method: clonedPaymentMethod.id,
+						confirmation_method: 'automatic',
+						confirm: true,
+						application_fee_amount: fee,
+						// description: req.query.description,
+					}, {
+						stripeAccount: stripeClientId
+					},
+					function(err : any, paymentIntent : any) {
+						// asynchronously called
+						if (err != null) {
+							console.log('Error create: ', err);
+							res("")
+						}
+						else {
+							console.log('createdPaymentIntents: ', paymentIntent)
+							res(JSON.stringify({
+								paymentIntent: paymentIntent,
+								stripeAccount: stripeClientId
+							}))
+						}
+					})
+				}
+			})
+		})
+
+	}
 }
+
+// import { ObjectType, Field, ID } from "type-graphql";
+
+// @ObjectType()
+// export class StripePI {
+//   @Field(() => ID)
+//   id: number;
+
+//   @Field()
+//   type: String;
+
+//   @Field(() => User)
+//   user: User;
+// }
+
