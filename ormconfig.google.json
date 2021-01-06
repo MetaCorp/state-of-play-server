@@ -1,0 +1,12 @@
+{
+  "name": "default",
+  "type": "postgres",
+  "host": "34.77.96.98",
+  "port": "5432",
+  "username": "postgres",
+  "password": "lDuNy8piEdOl9Pmd",
+  "database": "postgres",
+  "synchronize": true,
+  "logging": true,
+  "entities": ["src/entity/*.*"]
+}

@@ -174,8 +174,8 @@ export class UpdateStateOfPlayInput {
   @Field(() => UpdateOwnerInput)
   owner: UpdateOwnerInput
   
-  @Field(() => UpdateRepresentativeInput)
-  representative: UpdateRepresentativeInput
+  @Field(() => UpdateRepresentativeInput, { nullable: true })
+  representative?: UpdateRepresentativeInput | null
 
   @Field(() => [UpdateTenantInput])
   @ArrayMaxSize(MAX_TENANTS)

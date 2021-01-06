@@ -175,8 +175,8 @@ export class CreateStateOfPlayInput {// TODO
   @Field(() => CreateOwnerInput)
   owner: CreateOwnerInput
   
-  @Field(() => CreateRepresentativeInput)
-  representative: CreateRepresentativeInput
+  @Field(() => CreateRepresentativeInput, { nullable: true })
+  representative?: CreateRepresentativeInput | null
 
   @Field(() => [CreateTenantInput])
   @ArrayMaxSize(MAX_TENANTS)

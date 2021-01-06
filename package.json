@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "engines": {
-    "node": "12.17.0"
+    "node": "12.x.x"
   },
   "dependencies": {
     "@google-cloud/storage": "^5.7.0",

@@ -82,9 +82,9 @@ export class StateOfPlay extends BaseEntity {
   @ManyToOne(() => Owner, owner => owner.stateOfPlays, { cascade: true, onDelete: "CASCADE" })
   owner: Owner
   
-  @Field(() => Representative)
-  @ManyToOne(() => Representative, representative => representative.stateOfPlays, { cascade: true, onDelete: "CASCADE" })
-  representative: Representative
+  @Field(() => Representative, { nullable: true })
+  @ManyToOne(() => Representative, representative => representative.stateOfPlays, { nullable: true, cascade: true, onDelete: "CASCADE" })
+  representative: Representative | null
 
   @Field(() => [Tenant])
   @ManyToMany(() => Tenant, tenant => tenant.stateOfPlays, { cascade: true, onDelete: "CASCADE" })

@@ -133,7 +133,7 @@ export class StateOfPlayResolver {
 		user.credits = user.credits - 1
 
 		// @ts-ignore
-		var owner = data.owner.id && await Owner.findOne({ id: data.owner.id })
+		var owner = data.owner.id ? await Owner.findOne({ id: data.owner.id }) : null
 		if (!owner) {
 			owner = await Owner.create({
 				firstName: data.owner.firstName,
@@ -141,31 +141,34 @@ export class StateOfPlayResolver {
 				address: data.owner.address,
 				postalCode: data.owner.postalCode,
 				city: data.owner.city,
-				company: data.representative.company,
+				company: data.owner.company,
 				user: user,
 			}).save();
 		}
 		// console.log('owner: ', owner)
 		
-		// @ts-ignore
-		var representative = data.representative.id && await Representative.findOne({ id: data.representative.id })
-		if (!representative) {
-			representative = await Representative.create({
-				firstName: data.representative.firstName,
-				lastName: data.representative.lastName,
-				address: data.representative.address,
-				postalCode: data.representative.postalCode,
-				city: data.representative.city,
-				company: data.representative.company,
-				user: user,
-			}).save();
+		var representative = null
+		if (data.representative) {
+			// @ts-ignore
+			var representative = data.representative.id ? await Representative.findOne({ id: data.representative.id }) : null
+			if (!representative) {
+				representative = await Representative.create({
+					firstName: data.representative.firstName,
+					lastName: data.representative.lastName,
+					address: data.representative.address,
+					postalCode: data.representative.postalCode,
+					city: data.representative.city,
+					company: data.representative.company,
+					user: user,
+				}).save();
+			}
 		}
 		// console.log('representative: ', representative)
 
 		const tenants = []
 		for(let i = 0; i < data.tenants.length; i++) {
 			// @ts-ignore
-			var tenant = data.tenants[i].id && await Tenant.findOne({ id: data.tenants[i].id })
+			var tenant = data.tenants[i].id ? await Tenant.findOne({ id: data.tenants[i].id }) : null
 			if (!tenant) {
 				tenant = await Tenant.create({
 					firstName: data.tenants[i].firstName,
@@ -181,7 +184,7 @@ export class StateOfPlayResolver {
 		// console.log('tenants[0]: ', tenants[0])
 		
 		// @ts-ignore
-		var property = data.property.id && await Property.findOne({ id: data.property.id })
+		var property = data.property.id ? await Property.findOne({ id: data.property.id }) : null
 		if (!property) {
 			property = await Property.create({
 				reference: data.property.reference,
@@ -316,7 +319,7 @@ export class StateOfPlayResolver {
 		console.log('updateStateOfPlay user: ', user)
 
 		// @ts-ignore
-		var owner = data.owner.id && await Owner.findOne({ id: data.owner.id })
+		var owner = data.owner.id ? await Owner.findOne({ id: data.owner.id }) : null
 		if (!owner) {
 			owner = await Owner.create({
 				firstName: data.owner.firstName,
@@ -330,25 +333,28 @@ export class StateOfPlayResolver {
 		}
 		// console.log('owner: ', owner)
 		
-		// @ts-ignore
-		var representative = data.representative.id && await Representative.findOne({ id: data.representative.id })
-		if (!representative) {
-			representative = await Representative.create({
-				firstName: data.representative.firstName,
-				lastName: data.representative.lastName,
-				address: data.representative.address,
-				postalCode: data.representative.postalCode,
-				city: data.representative.city,
-				company: data.representative.company,
-				user: user,
-			}).save();
+		var representative = null
+		if (data.representative) {
+			// @ts-ignore
+			representative = data.representative.id ? await Representative.findOne({ id: data.representative.id }) : null
+			if (!representative) {
+				representative = await Representative.create({
+					firstName: data.representative.firstName,
+					lastName: data.representative.lastName,
+					address: data.representative.address,
+					postalCode: data.representative.postalCode,
+					city: data.representative.city,
+					company: data.representative.company,
+					user: user,
+				}).save();
+			}
 		}
 		// console.log('representative: ', representative)
 
 		const tenants = []
 		for(let i = 0; i < data.tenants.length; i++) {
 			// @ts-ignore
-			var tenant = data.tenants[i].id && await Tenant.findOne({ id: data.tenants[i].id })
+			var tenant = data.tenants[i].id ? await Tenant.findOne({ id: data.tenants[i].id }) : null
 			if (!tenant) {
 				tenant = await Tenant.create({
 					firstName: data.tenants[i].firstName,
@@ -364,7 +370,7 @@ export class StateOfPlayResolver {
 		// console.log('tenants[0]: ', tenants[0])
 		
 		// @ts-ignore
-		var property = data.property.id && await Property.findOne({ id: data.property.id })
+		var property = data.property.id ? await Property.findOne({ id: data.property.id }) : null
 		if (!property) {
 			property = await Property.create({
 				reference: data.property.reference,
