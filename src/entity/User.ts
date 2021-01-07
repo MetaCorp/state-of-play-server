@@ -69,12 +69,16 @@ export class User extends BaseEntity {
   @Column({ default: 0 })
   credits: number;
 
+  @Field()
+  @Column({ default: false })
+  isAdmin: boolean;
+  
   @Column()
   password: string;
 
   @Column("bool", { default: false })
   confirmed: boolean;
-  
+
   @Field(() => [Property])
   @OneToMany(() => Property, property => property.user)
   properties: Property[];

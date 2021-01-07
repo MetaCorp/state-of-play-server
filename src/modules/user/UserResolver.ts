@@ -3,6 +3,7 @@ import { MyContext } from "../../types/MyContext";
 
 import { UserInput } from "./UserInput";
 import { UpdateUserInput } from "./UpdateUserInput";
+import { UpdateUserAdminInput } from "./UpdateUserAdminInput";
 import { DeleteUserInput } from "./DeleteUserInput";
 import { PayInput } from "./PayInput";
 import { StripePIInput } from "./StripePIInput";
@@ -63,11 +64,37 @@ export class UserResolver {
 		}
 
 		const user = await User.update(ctx.userId.toString(), newUser)
-		console.log('updateOwner: ', user)
+		console.log('updateUser: ', user)
 
 		if (user.affected !== 1) return 0
 
 		return 1
+	}
+
+	@Authorized()// TODO: authorized ADMIN
+	@Mutation(() => User)
+	async updateUserAdmin(@Arg("data") data: UpdateUserAdminInput, @Ctx() ctx: MyContext) {
+		
+		const admin = await User.findOne(ctx.userId.toString());
+		if (!admin || !admin.isAdmin)
+			return
+
+		console.log('updateUserAdmin: ', data)
+
+		const newUser : any = {
+			firstName: data.firstName,
+			lastName: data.lastName,
+			email: data.email,
+			credits: data.credits,
+			isAdmin: data.isAdmin
+		}
+
+		const user = await User.update(data.id, newUser)
+		console.log('updateUserAdmin: ', user)
+
+		if (user.affected !== 1) return
+
+		return await User.findOne(data.id)
 	}
 
 	@Authorized()
