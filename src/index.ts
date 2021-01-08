@@ -123,7 +123,8 @@ const main = async () => {
       //   ]
       // }) as any
     ],
-    uploads: false // disable apollo upload property
+    uploads: false, // disable apollo upload property
+    introspection: true
   });
 
   apolloServer.applyMiddleware({ app, cors: false, path: '/graphql' });
