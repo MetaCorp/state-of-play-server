@@ -15,6 +15,7 @@ import { uploadFile } from '../../utils/GCS';
 const stripe = require('stripe')('sk_test_51I5BaICPxFg6weCstvnEDYMpJUaSqoqrIznXGkPcvwD5rvOIQKmnTubo5ogQxLC4lqS3YMq5MSScBWxGuf8LuUt700wDFMrZ4r')
 const stripeClientId = 'acct_1I5JONEgk3XYqoy9'
 
+// bump version
 @Resolver()
 export class UserResolver {
 

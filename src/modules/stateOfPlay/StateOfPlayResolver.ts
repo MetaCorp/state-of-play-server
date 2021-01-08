@@ -122,15 +122,19 @@ export class StateOfPlayResolver {
 	async createStateOfPlay(@Arg("data") data: CreateStateOfPlayInput, @Ctx() ctx: MyContext) {
 
 		// @ts-ignore
-		const user = await User.findOne({ id: ctx.userId }, { relations: [] })
+		const user = await User.findOne({ id: ctx.userId }, { relations: ["stateOfPlays"] })
 		if (!user) return
 		console.log('createStateOfPlay user: ', user)
 
 		// TODO : abonnement
-		if (!user.paidOnce && user.stateOfPlays.length > 0 || user.credits == 0)
-			return
+		// TODO: reactivate payment
+		// if (!user.paidOnce && user.stateOfPlays.length > 0 || user.credits == 0)
+		// 	return
 		
-		user.credits = user.credits - 1
+		// user.credits = user.credits - 1
+
+		if (user.stateOfPlays.length >= 5)
+			return
 
 		// @ts-ignore
 		var owner = data.owner.id ? await Owner.findOne({ id: data.owner.id }) : null
@@ -303,7 +307,9 @@ export class StateOfPlayResolver {
 		console.log('stateOfPlay saved')
 		// console.log('stateOfPlay: ', stateOfPlay)
 
-		await user.save();// Save pour update les crédits
+		await User.update(user.id, {// Save pour update les crédits
+			credits: user.credits
+		})
 
 		// await stateOfPlay.save();
 		return stateOfPlay;
