@@ -26,4 +26,7 @@ export class UpdateUserAdminInput {
     @Field()
     isAdmin: boolean;
 
+    @Field()
+    isPro: boolean;
+
 }

@@ -18,12 +18,14 @@ import { User } from "../../entity/User";
 export class RepresentativeResolver {
 	@Authorized()
 	@Query(() => [Representative])
-	representatives(@Arg("filter", { nullable: true }) filter?: RepresentativesFilterInput) {
+	representatives(@Ctx() ctx: MyContext, @Arg("filter", { nullable: true }) filter?: RepresentativesFilterInput) {
 		return Representative.find({
             where: filter ? [
-                { lastName: ILike("%" + filter.search + "%") },
-                { firstName: ILike("%" + filter.search + "%") },
-            ] : [],
+                { lastName: ILike("%" + filter.search + "%"), user: { id: ctx.userId } },
+                { firstName: ILike("%" + filter.search + "%"), user: { id: ctx.userId } },
+            ] : [
+				{ user: { id: ctx.userId } }
+			],
 			order: { lastName: 'ASC', firstName: 'ASC' },
 			relations: ["user", "stateOfPlays"]
         })

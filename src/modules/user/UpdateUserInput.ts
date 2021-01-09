@@ -5,11 +5,11 @@ import { Length } from "class-validator";
 
 @InputType()
 export class UpdateUserInput {
-    @Field()
+    @Field({ nullable: true })
     @Length(1, 255)
     firstName: string;
   
-    @Field()
+    @Field({ nullable: true })
     @Length(1, 255)
     lastName: string;
 
@@ -39,4 +39,7 @@ export class UpdateUserInput {
 
     @Field(() => GraphQLUpload,{ nullable: true })
     newLogo: FileUpload;
+
+    @Field({ nullable: true })
+    accounts: String;
 }

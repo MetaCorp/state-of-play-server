@@ -72,6 +72,14 @@ export class User extends BaseEntity {
   @Field()
   @Column({ default: false })
   isAdmin: boolean;
+
+  @Field()
+  @Column({ default: false })
+  isPro: boolean;
+
+  @Field(() => String)
+  @Column({ default: JSON.stringify([]) })
+  accounts: String
   
   @Column()
   password: string;

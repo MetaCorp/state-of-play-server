@@ -18,12 +18,14 @@ import { User } from "../../entity/User";
 export class TenantResolver {
 	@Authorized()
 	@Query(() => [Tenant])
-	tenants(@Arg("filter", { nullable: true }) filter?: TenantsFilterInput) {
+	tenants(@Ctx() ctx: MyContext, @Arg("filter", { nullable: true }) filter?: TenantsFilterInput) {
 		return Tenant.find({
             where: filter ? [
-                { lastName: ILike("%" + filter.search + "%") },
-                { firstName: ILike("%" + filter.search + "%") },
-            ] : [],
+                { lastName: ILike("%" + filter.search + "%"), user: { id: ctx.userId } },
+                { firstName: ILike("%" + filter.search + "%"), user: { id: ctx.userId } },
+            ] : [
+				{ user: { id: ctx.userId } }
+			],
 			order: { lastName: 'ASC', firstName: 'ASC' },
 			relations: ["user", "stateOfPlays"]
         })

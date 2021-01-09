@@ -14,6 +14,9 @@ class LoginType {
 
   @Field()
   admin: boolean;
+
+  @Field({ nullable: true })
+  user?: User
 }
 
 
@@ -33,6 +36,8 @@ export class LoginResolver {
         admin: false
       };
     }
+
+    const user2 = await User.findOne(user.id, { relations: ["stateOfPlays" ]})
 
     const valid = await bcrypt.compare(password, user.password);
 
@@ -56,7 +61,8 @@ export class LoginResolver {
       token: sign({ userId: user.id }, "TypeGraphQL", {
         expiresIn: "1d"
       }),
-      admin: user.isAdmin
+      admin: user.isAdmin,
+      user: user2
     }
   }
 }

@@ -46,16 +46,17 @@ export class UserResolver {
 		
 		console.log('updateUser: ', data)
 
-		const newUser : any = {
-			firstName: data.firstName,
-			lastName: data.lastName,
-			company: data.company,
-			address: data.address,
-			postalCode: data.postalCode,
-			documentHeader: data.documentHeader,
-			documentEnd: data.documentEnd,
-			city: data.city,
-		}
+		const newUser : any = {}
+
+		if (data.firstName) newUser.firstName = data.firstName
+		if (data.lastName) newUser.lastName = data.lastName
+		if (data.company) newUser.company = data.company
+		if (data.address) newUser.address = data.address
+		if (data.postalCode) newUser.postalCode = data.postalCode
+		if (data.documentHeader) newUser.documentHeader = data.documentHeader
+		if (data.documentEnd) newUser.documentEnd = data.documentEnd
+		if (data.city) newUser.city = data.city
+		if (data.accounts) newUser.accounts = data.accounts
 
 		if (data.newLogo) {
 			const { createReadStream, filename } = await data.newLogo;
@@ -87,7 +88,8 @@ export class UserResolver {
 			lastName: data.lastName,
 			email: data.email,
 			credits: data.credits,
-			isAdmin: data.isAdmin
+			isAdmin: data.isAdmin,
+			isPro: data.isPro
 		}
 
 		const user = await User.update(data.id, newUser)
