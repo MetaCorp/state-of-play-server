@@ -1,4 +1,4 @@
-import { Query, Resolver, Ctx, Arg, Mutation, Int, Authorized  } from "type-graphql";
+import { Query, Resolver, Ctx, Arg, Mutation, Int, Authorized, Subscription, ObjectType, Field, PubSub, Publisher, Root, Args, ArgsType } from "type-graphql";
 import { MyContext } from "../../types/MyContext";
 
 import { UserInput } from "./UserInput";
@@ -7,6 +7,7 @@ import { UpdateUserAdminInput } from "./UpdateUserAdminInput";
 import { DeleteUserInput } from "./DeleteUserInput";
 import { PayInput } from "./PayInput";
 import { StripePIInput } from "./StripePIInput";
+import { LoginAccountInput } from "./LoginAccountInput";
 
 import { User } from "../../entity/User";
 
@@ -15,7 +16,30 @@ import { uploadFile } from '../../utils/GCS';
 const stripe = require('stripe')('sk_test_51I5BaICPxFg6weCstvnEDYMpJUaSqoqrIznXGkPcvwD5rvOIQKmnTubo5ogQxLC4lqS3YMq5MSScBWxGuf8LuUt700wDFMrZ4r')
 const stripeClientId = 'acct_1I5JONEgk3XYqoy9'
 
-// bump version
+
+@ObjectType()
+class AccountConnected {
+	@Field()
+	userId: number;
+
+	@Field()
+	accountId: number;
+}
+
+@ArgsType()
+class AccountConnectedArgs {
+	@Field()
+	userId: number;
+
+	@Field()
+	accountId: number;
+}
+
+interface AccountConnectedPayload {
+	userId: number;
+	accountId: number;
+}
+
 @Resolver()
 export class UserResolver {
 
@@ -181,6 +205,32 @@ export class UserResolver {
 			})
 		})
 
+	}
+
+	@Authorized()
+	@Mutation(() => Int)
+	async loginAccount(@Arg("data") data: LoginAccountInput, @Ctx() ctx: MyContext, @PubSub("ACCOUNT_CONNECTED") publish: Publisher<AccountConnectedPayload>) {
+		// @ts-ignore
+		await publish({ userId: ctx.userId, accountId: data.accountId });
+		return 1;
+	}
+
+	// Get userId when he subscribes to ACCOUNT_CONNECTED
+	@Subscription({
+		topics: "ACCOUNT_CONNECTED",
+		filter: ({ payload, args }) => {
+			console.log('ACCOUNT_CONNECTED payload: ', payload)
+			console.log('ACCOUNT_CONNECTED args: ', args)
+			return args.userId === payload.userId && args.accountId === payload.accountId
+		},
+	})
+	accountConnected(@Root() { userId, accountId }: AccountConnectedPayload, @Args() args: AccountConnectedArgs): AccountConnected {
+		console.log('newNotification userId: ', userId)
+		console.log('newNotification args: ', args)
+		return {
+			userId,
+			accountId
+		}
 	}
 }
 

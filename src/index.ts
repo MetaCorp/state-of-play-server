@@ -1,3 +1,5 @@
+const http = require('http');
+
 import { ApolloServer } from "apollo-server-express";
 // import connectRedis from "connect-redis";
 // @ts-ignore
@@ -89,8 +91,13 @@ const main = async () => {
   const apolloServer = new ApolloServer({
     schema,
     // formatError: formatArgumentValidationError,
-    context: ({ req, res }: any) => {
+    context: ({ req, res, connection }: any) => {
       
+      if (connection) {
+        console.log('connection.context: ', connection.context)
+        return connection.context
+      }
+
       console.log('req.user: ', req.user)
       return {
         req,
@@ -98,6 +105,11 @@ const main = async () => {
         userId: req.user && req.user.userId
         // authorsLoader: createAuthorsLoader()
       }
+    },
+    subscriptions: {
+      onConnect: (connectionParams) => {
+        console.log('subscriptions onConnect: ', connectionParams);// TODO: set in context
+      },
     },
     validationRules: [
       // queryComplexity({
@@ -129,9 +141,18 @@ const main = async () => {
 
   apolloServer.applyMiddleware({ app, cors: false, path: '/graphql' });
 
-  app.listen(process.env.PORT || 4000, () => {
-    console.log("server started on http://localhost:4000/graphql");
-  });
+  const httpServer = http.createServer(app);
+  apolloServer.installSubscriptionHandlers(httpServer);
+
+  // ⚠️ Pay attention to the fact that we are calling `listen` on the http server variable, and not on `app`.
+  httpServer.listen(process.env.PORT || 4000, () => {
+    console.log(`🚀 Server ready at http://localhost:${process.env.PORT || 4000}${apolloServer.graphqlPath}`)
+    console.log(`🚀 Subscriptions ready at ws://localhost:${process.env.PORT || 4000}${apolloServer.subscriptionsPath}`)
+  })
+
+  // app.listen(process.env.PORT || 4000, () => {
+  //   console.log("server started on http://localhost:4000/graphql");
+  // });
 };
 
 main().catch(err => console.error(err));
