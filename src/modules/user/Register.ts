@@ -52,7 +52,7 @@ export class RegisterResolver {
     firstName,
     lastName,
     password,
-    isPro
+    isPro = false
   }: RegisterInput): Promise<RegisterType> {
     const hashedPassword = await bcrypt.hash(password, 12);
 
