@@ -8,6 +8,7 @@ import { DeleteUserInput } from "./DeleteUserInput";
 import { PayInput } from "./PayInput";
 import { StripePIInput } from "./StripePIInput";
 import { LoginAccountInput } from "./LoginAccountInput";
+import { VerifyInput } from "./VerifyInput";
 
 import { User } from "../../entity/User";
 
@@ -38,6 +39,15 @@ class AccountConnectedArgs {
 interface AccountConnectedPayload {
 	userId: number;
 	accountId: number;
+}
+
+@ObjectType()
+class VerifyType {
+	@Field()
+	isVerified: boolean;
+
+	@Field({ nullable: true })
+	error?: string;
 }
 
 @Resolver()
@@ -204,7 +214,43 @@ export class UserResolver {
 				}
 			})
 		})
+	}
 
+	@Authorized()
+	@Query(() => VerifyType)
+	async verify(@Arg("data") data: VerifyInput, @Ctx() ctx: MyContext) : Promise<VerifyType> {
+		
+		// @ts-ignore
+		const user = await User.findOne({ id: ctx.userId })
+
+		if (!user) {
+			return {
+				isVerified: false,
+				error: "Could not find user"
+			}
+		}
+		
+		if (new Date().getTime() - new Date(user.dateVerificationCode).getTime() < 1000 * 60 * 20) {
+			return {
+				isVerified: false,
+				error: "Code expired"
+			}
+		}
+
+		if (data.code === user.verificationCode) {// 20 minutes
+			user.isVerified = true
+			user.verificationCode = undefined
+			await user.save()
+			return {
+				isVerified: true
+			}
+		}
+		else {
+			return {
+				isVerified: false,
+				error: "Wrong code"
+			}
+		}
 	}
 
 	@Authorized()

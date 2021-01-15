@@ -80,6 +80,18 @@ export class User extends BaseEntity {
   @Field(() => String)
   @Column({ default: JSON.stringify([]) })
   accounts: String
+
+  // @Field({ nullable: true })
+  @Column({ nullable: true })
+  verificationCode?: number
+
+  // @Field()
+  @Column({ type: 'date', default: new Date().toISOString() })
+  dateVerificationCode: Date
+
+  @Field()
+  @Column({ default: false })
+  isVerified: boolean;
   
   @Column()
   password: string;
