@@ -18,11 +18,11 @@ import { User } from "../../entity/User";
 export class PropertyTypeResolver {
 	@Authorized()
 	@Query(() => [PropertyType])
-	propertyTypes(@Arg("filter", { nullable: true }) filter?: PropertyTypesFilterInput) {
+	propertyTypes(@Ctx() ctx: MyContext, @Arg("filter", { nullable: true }) filter?: PropertyTypesFilterInput) {
 		return PropertyType.find({
             where: filter ? [
-                { type: ILike("%" + filter.search + "%") },
-            ] : [],
+                { type: ILike("%" + filter.search + "%"), user: { id: ctx.userId } },
+            ] : [{ user: { id: ctx.userId } }],
 			order: { type: 'ASC' },
 			relations: ["user"]
         })
