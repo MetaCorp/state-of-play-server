@@ -9,12 +9,15 @@ import { PayInput } from "./PayInput";
 import { StripePIInput } from "./StripePIInput";
 import { LoginAccountInput } from "./LoginAccountInput";
 import { VerifyInput } from "./VerifyInput";
+import { SendEmailNewPasswordInput } from "./SendEmailNewPasswordInput";
 
 import { User } from "../../entity/User";
 
 import { uploadFile } from '../../utils/GCS';
 
 import { transporter } from '../utils/email';
+var generator = require('generate-password');
+import bcrypt from "bcryptjs";
 
 
 const stripe = require('stripe')('sk_test_51I5BaICPxFg6weCstvnEDYMpJUaSqoqrIznXGkPcvwD5rvOIQKmnTubo5ogQxLC4lqS3YMq5MSScBWxGuf8LuUt700wDFMrZ4r')
@@ -291,6 +294,44 @@ export class UserResolver {
 			to: user.email,
 			subject: "Code de confirmation d'email Housely",
 			html: "Voici votre code de confirmation: " + verificationCode
+		};
+		
+		transporter.sendMail(mailOptions, (error : any, info : any) => {
+			if (error) {
+				console.log(error);  
+			} else {     
+				console.log('Email sent: ' + info.response);  
+			}   
+		});
+
+		return 1
+	}
+
+	@Mutation(() => Int)
+	async sendEmailNewPassword(@Arg("data") data: SendEmailNewPasswordInput) : Promise<number> {
+		
+		// @ts-ignore
+		const user = await User.findOne({ email: data.email })
+
+		if (!user) return 0
+		if (!user.isVerified) return 0
+
+		
+		const newPassword = generator.generate({
+			length: 10,
+			numbers: true
+		});
+
+		const newHashedPassword = await bcrypt.hash(newPassword, 12);
+		user.password = newHashedPassword
+
+		await user.save();
+
+		const mailOptions = {
+			from: "housely.noreply@gmail.com",
+			to: user.email,
+			subject: "Nouveau mot de passe Housely",
+			html: "Voici votre nouveau mot de passe: " + newPassword
 		};
 		
 		transporter.sendMail(mailOptions, (error : any, info : any) => {
