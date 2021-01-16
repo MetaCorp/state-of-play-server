@@ -315,7 +315,7 @@ export class UserResolver {
 		const user = await User.findOne({ email: data.email })
 
 		if (!user) return 0
-		if (!user.isVerified) return 0
+		// if (!user.isVerified) return 0
 
 		
 		const newPassword = generator.generate({
