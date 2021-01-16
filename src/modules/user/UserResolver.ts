@@ -14,6 +14,9 @@ import { User } from "../../entity/User";
 
 import { uploadFile } from '../../utils/GCS';
 
+import { transporter } from '../utils/email';
+
+
 const stripe = require('stripe')('sk_test_51I5BaICPxFg6weCstvnEDYMpJUaSqoqrIznXGkPcvwD5rvOIQKmnTubo5ogQxLC4lqS3YMq5MSScBWxGuf8LuUt700wDFMrZ4r')
 const stripeClientId = 'acct_1I5JONEgk3XYqoy9'
 
@@ -217,7 +220,7 @@ export class UserResolver {
 	}
 
 	@Authorized()
-	@Query(() => VerifyType)
+	@Mutation(() => VerifyType)
 	async verify(@Arg("data") data: VerifyInput, @Ctx() ctx: MyContext) : Promise<VerifyType> {
 		
 		// @ts-ignore
@@ -227,6 +230,13 @@ export class UserResolver {
 			return {
 				isVerified: false,
 				error: "Could not find user"
+			}
+		}
+
+		if (user.isVerified) {
+			return {
+				isVerified: true,
+				error: "Email already verified"
 			}
 		}
 		
@@ -251,6 +261,47 @@ export class UserResolver {
 				error: "Wrong code"
 			}
 		}
+	}
+
+	@Authorized()
+	@Mutation(() => Int)
+	async sendVerificationEmail(@Ctx() ctx: MyContext) : Promise<number> {
+		
+		// @ts-ignore
+		const user = await User.findOne({ id: ctx.userId })
+
+		if (!user) return 0
+		if (user.isVerified) return 0
+
+		
+		let verificationCode = Math.floor(Math.random() * 1000000).toString()
+
+		while (verificationCode.length < 6) {
+		  verificationCode = '0' + verificationCode
+		}
+
+		user.verificationCode = verificationCode
+		// @ts-ignore
+		user.dateVerificationCode = new Date().toISOString()
+
+		await user.save();
+
+		const mailOptions = {
+			from: "housely.noreply@gmail.com",
+			to: user.email,
+			subject: "Code de confirmation d'email Housely",
+			html: "Voici votre code de confirmation: " + verificationCode
+		};
+		
+		transporter.sendMail(mailOptions, (error : any, info : any) => {
+			if (error) {
+				console.log(error);  
+			} else {     
+				console.log('Email sent: ' + info.response);  
+			}   
+		});
+
+		return 1
 	}
 
 	@Authorized()

@@ -83,7 +83,7 @@ export class User extends BaseEntity {
 
   // @Field({ nullable: true })
   @Column({ nullable: true })
-  verificationCode?: number
+  verificationCode?: string
 
   // @Field()
   @Column({ type: 'date', default: new Date().toISOString() })

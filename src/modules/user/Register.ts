@@ -23,6 +23,7 @@ import electricities from '../../data/electricities.json';
 import meters from '../../data/meters.json';
 import keys from '../../data/keys.json';
 
+import { transporter } from '../utils/email';
 
 @ObjectType()
 class RegisterType {
@@ -56,9 +57,13 @@ export class RegisterResolver {
   }: RegisterInput): Promise<RegisterType> {
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const verificationCode = Math.floor(Math.random() * 1000000)
+    console.log('REGISTER')
 
-    console.log('verificationCode: ', verificationCode)
+    let verificationCode = Math.floor(Math.random() * 1000000).toString()
+
+    while (verificationCode.length < 6) {
+      verificationCode = '0' + verificationCode
+    }
 
     const user = await User.create({
       firstName,
@@ -75,34 +80,48 @@ Le présent état des lieux établi contradictoirement entre les parties qui le 
     }).save();
 
     // TODO: sendEmail
+    const mailOptions = {
+      from: "housely.noreply@gmail.com",
+      to: email,
+      subject: "Code de confirmation d'email Housely",
+      html: "Voici votre code de confirmation: " + verificationCode
+    };
+    
+    transporter.sendMail(mailOptions, (error : any, info : any) => {
+      if (error) {
+        console.log(error);  
+      } else {     
+        console.log('Email sent: ' + info.response);  
+      }   
+    });
 
     // Decoration.save()
     // @ts-ignore
-    Room.save(rooms.map(room => ({
+    await Room.save(rooms.map(room => ({
       name: room,
       user: user
     })))
 
     // @ts-ignore
-    Decoration.save(decorations.map(decoration => ({
+    await Decoration.save(decorations.map(decoration => ({
       type: decoration,
       user: user
     })))
 
     // @ts-ignore
-    Electricity.save(electricities.map(electricity => ({
+    await Electricity.save(electricities.map(electricity => ({
       type: electricity,
       user: user
     })))
 
     // @ts-ignore
-    Meter.save(meters.map(meter => ({
+    await Meter.save(meters.map(meter => ({
       type: meter,
       user: user
     })))
 
     // @ts-ignore
-    Key.save(keys.map(key => ({
+    await Key.save(keys.map(key => ({
       type: key,
       user: user
     })))
