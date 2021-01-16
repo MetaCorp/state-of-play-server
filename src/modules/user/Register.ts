@@ -10,6 +10,7 @@ import { Decoration } from "../../entity/Decoration";
 import { Electricity } from "../../entity/Electricity";
 import { Meter } from "../../entity/Meter";
 import { Key } from "../../entity/Key";
+import { PropertyType } from "../../entity/PropertyType";
 
 import { RegisterInput } from "./register/RegisterInput";
 import { isAuth } from "../middleware/isAuth";
@@ -22,6 +23,7 @@ import decorations from '../../data/decorations.json';
 import electricities from '../../data/electricities.json';
 import meters from '../../data/meters.json';
 import keys from '../../data/keys.json';
+import propertyTypes from '../../data/propertyTypes.json';
 
 import { transporter } from '../utils/email';
 
@@ -123,6 +125,12 @@ Le présent état des lieux établi contradictoirement entre les parties qui le 
     // @ts-ignore
     await Key.save(keys.map(key => ({
       type: key,
+      user: user
+    })))
+
+    // @ts-ignore
+    await PropertyType.save(propertyTypes.map(propertyType => ({
+      type: propertyType,
       user: user
     })))
 
