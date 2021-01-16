@@ -10,6 +10,7 @@ import { StripePIInput } from "./StripePIInput";
 import { LoginAccountInput } from "./LoginAccountInput";
 import { VerifyInput } from "./VerifyInput";
 import { SendEmailNewPasswordInput } from "./SendEmailNewPasswordInput";
+import { ChangePasswordInput } from "./ChangePasswordInput";
 
 import { User } from "../../entity/User";
 
@@ -341,6 +342,23 @@ export class UserResolver {
 				console.log('Email sent: ' + info.response);  
 			}   
 		});
+
+		return 1
+	}
+
+	@Authorized()
+	@Mutation(() => Int)
+	async changePassword(@Arg("data") data: ChangePasswordInput, @Ctx() ctx: MyContext) : Promise<number> {
+		
+		// @ts-ignore
+		const user = await User.findOne({ id: ctx.userId })
+
+		if (!user) return 0
+		
+		const newHashedPassword = await bcrypt.hash(data.password, 12);
+		user.password = newHashedPassword
+
+		await user.save();
 
 		return 1
 	}

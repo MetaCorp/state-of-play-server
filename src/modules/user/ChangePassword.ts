@@ -5,15 +5,15 @@ import bcrypt from "bcryptjs";
 import { User } from "../../entity/User";
 import { redis } from "../../redis";
 import { forgotPasswordPrefix } from "../constants/redisPrefixes";
-import { ChangePasswordInput } from "./changePassword/ChangePasswordInput";
+import { ChangePasswordInput2 } from "./changePassword/ChangePasswordInput";
 import { MyContext } from "../../types/MyContext";
 
 @Resolver()
 export class ChangePasswordResolver {
   @Mutation(() => User, { nullable: true })
-  async changePassword(
+  async changePassword2(
     @Arg("data")
-    { token, password }: ChangePasswordInput,
+    { token, password }: ChangePasswordInput2,
     @Ctx() ctx: MyContext
   ): Promise<User | null> {
     const userId = await redis.get(forgotPasswordPrefix + token);
